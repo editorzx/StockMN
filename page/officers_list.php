@@ -3,15 +3,15 @@ if(!($_SESSION['admin']))
 	header("Location: index");	
 ?>
 <?php
-	/*
 	if(isset($_POST['entervalue']))
 	{
 		$id = $_REQUEST['idp'];
-		$price = $_REQUEST['price'];
-		$quantity = $_REQUEST['quantity'];
+		$Email = $_REQUEST['Email'];
+		$Name = $_REQUEST['Name'];
+		$LastName = $_REQUEST['LastName'];
 		
 		$msg = '';
-		switch ($functions->EditInfoMedical($id,$quantity,$price)) {
+		switch ($functions->EditInfoOfficers($id,$Email,$Name,$LastName)) {
 		  case 0:
 			$msg = 'ไม่สำเร็จ';
 			break;
@@ -23,8 +23,22 @@ if(!($_SESSION['admin']))
 		}
 		echo "<script type='text/javascript'>alert('$msg');</script>";
 		unset($_REQUEST['id']);
+	}elseif(isset($_GET['remid'])){
+		
+		$msg = '';
+		switch ($functions->DeleteOfficers($_GET['remid'])) {
+		  case 0:
+			$msg = 'ไม่สำเร็จ';
+			break;
+		  case 1:
+			$msg = 'ลบผู้ใช้เรียบร้อย';
+			break;
+		  default:
+			$msg = 'ไม่สำเร็จ';
+		}
+		echo "<script type='text/javascript'>alert('$msg');location='index?p=officers_list'</script>";
+		unset($_REQUEST['remid']);
 	}
-	*/
 
 ?>
 <?php include ('template/left_menu.php'); ?>
@@ -94,6 +108,7 @@ if(!($_SESSION['admin']))
 											<th class="text-center">เข้าใช้งานล่าสุด</th>
 											<th class="text-center">สถานะ</th>
 											<th></th>
+											<th></th>
 										  </tr>
 										</thead>
 										<tbody>
@@ -119,6 +134,9 @@ if(!($_SESSION['admin']))
 												</td>
 												<td>
 													<a href="index?p=officers_list&id=<?php echo $row["Id"];?>"><button class="form-control" type="button">EDIT</button></a>
+												</td>
+												<td>
+													<a href="index?p=officers_list&remid=<?php echo $row["Id"];?>"><button class=" btn btn-danger" type="button">DELETE</button></a>
 												</td>
 											</tr>
 											<?php
@@ -159,8 +177,16 @@ if(!($_SESSION['admin']))
 										<input class="form-control" id="Email" name="Email" value="<?php echo $result_list['Email']; ?>" type="text" placeholder="Email" required>
 									</div>
 									<div class="col-md-6">
+										<span class="help-block">Password</span>
+										<input class="form-control" id="Password" name="Password" disabled value="<?php echo md5('jk2x*ssz'.$result_list['Password']); ?>" type="password" placeholder="Password" required>
+									</div>
+									<div class="col-md-6">
 										<span class="help-block">Name</span>
-										<input class="form-control" id="Name" name="Name" min="1" value="<?php echo $result_list['Officer_name']; ?>" type="text" placeholder="Name" required>
+										<input class="form-control" id="Name" name="Name"  value="<?php echo $result_list['Officer_name']; ?>" type="text" placeholder="Name" required>
+									</div>
+									<div class="col-md-6">
+										<span class="help-block">LastName</span>
+										<input class="form-control" id="LastName" name="LastName"  value="<?php echo $result_list['Officer_lastname']; ?>" type="text" placeholder="LastName" required>
 									</div>
 								</div>
 							</div>
@@ -168,7 +194,7 @@ if(!($_SESSION['admin']))
 					  </div>
 					  <div class="modal-footer">
 						<button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-						<button class="btn btn-primary" type="submit" name="entervalue">ยังไม่เสร็จ</button>
+						<button class="btn btn-primary" type="submit" name="entervalue">แก้ไข</button>
 					  </div>
 					</div>
 				  </div>

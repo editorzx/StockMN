@@ -66,12 +66,23 @@ $(document).ready(function() {
 		}
     })
 	
+	
 	$('body').on("click.btn", '[data-button-delete-id]', function () {
 		var idarray = $(this).attr('data-button-delete-id');
 		arraydrug.splice(idarray,1);
 		$(this).closest("tr").remove();
 	})
 	
+	$('body').on("click.li", '#list-e', function () {
+		let idh = $(this).attr('data-id');
+		if(idh){
+			//console.log("TESTxxzs " + idh);
+			
+			$(location).attr('href', 'index?p=check_stock&ids='+idh)
+			//$('#myModal').modal('show');
+			//$("#index").val(idh);
+		}
+	})
 	$('body').on("click.btn", '#addsql', function () {
 		if(arraydrug.length !== 0)
 		{
@@ -95,7 +106,7 @@ $(document).ready(function() {
 		$('#changeType').change(function() {
 			if(this.checked) {
 				$('#herbal').show();
-				   $('#medical').hide();
+				$('#medical').hide();
 			}else{
 				$('#herbal').hide();
 				$('#medical').show();

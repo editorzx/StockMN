@@ -258,6 +258,7 @@ class kdxr_function {
 		return ['result' => $posts];
 	}
 	
+	
 	public function GetminimumHerbal(){ //ดึงค่ายาสมุนไพรเหลือน้อยจากสต๊อกใน
 		$conn = self::selfconnectDb();
 		$post = array();
@@ -297,12 +298,35 @@ class kdxr_function {
 	public function Getherbalinstock(){
 		$conn = self::selfconnectDb();
 		$post = array();
-		$sql = "SELECT SUM(c.quantity) AS value_sum, a.name as Name, d.name as counting_name
+		$sql = "SELECT SUM(c.quantity) AS value_sum, a.name as Name, d.name as counting_name, b.id_herbal as IDHERBAL
 				FROM herbal_list a
 				LEFT JOIN imported_herbal_info b ON a.id=b.id_herbal
 				LEFT JOIN instock_herbal c ON c.id_import_info=b.id
 				LEFT JOIN counting_list d ON d.id=a.id_counting
+				LEFT JOIN type_herbal e ON e.id=a.id_type_herbal
 				GROUP BY a.Name
+				ORDER BY a.Name
+				";
+		$result = mysqli_query($conn, $sql);
+		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
+		{
+			$posts[] = $row;
+		}
+		return ['result' => $posts];
+	}
+	
+	public function GetHerbaldetail($id){
+		$conn = self::selfconnectDb();
+		$post = array();
+		$sql = "SELECT a.name as Name, d.name as counting_name, b.id_herbal as IDHERBAL, b.expire_date as Expire, b.price as Price, b.quantity as Quantity, e.Name as Type
+				,b2.Date as Date
+				FROM herbal_list a
+				JOIN imported_herbal_info b ON a.id=b.id_herbal
+				LEFT JOIN imported_herbal_data b2 ON b.id_import_data = b2.id
+				LEFT JOIN instock_herbal c ON c.id_import_info=b.id
+				LEFT JOIN counting_list d ON d.id=a.id_counting
+				LEFT JOIN type_herbal e ON e.id=a.id_type_herbal
+				WHERE a.Id = '$id'
 				ORDER BY a.Name
 				";
 		$result = mysqli_query($conn, $sql);
@@ -500,6 +524,21 @@ class kdxr_function {
 		return $query;
 	}
 	
+	public function EditInfoOfficers($id,$Email,$Name,$LastName){ 
+		$conn = self::selfconnectDb();
+		$sql = "update officers set Email = '$Email', Officer_name = '$Name', Officer_lastname = '$LastName' where Id = '$id'";
+		$query = mysqli_query($conn, $sql);
+		return $query;
+	}
+	
+	public function DeleteOfficers($id){ 
+		$conn = self::selfconnectDb();
+		$sql = "delete from Officers where Id = '$id'";
+		$query = mysqli_query($conn, $sql);
+		return $query;
+	}
+	
+	
 	function time_elapsed_string($datetime, $full = false) {
 		$now = new DateTime;
 		$ago = new DateTime($datetime);
@@ -519,14 +558,14 @@ class kdxr_function {
 		);
 		foreach ($string as $k => &$v) {
 			if ($diff->$k) {
-				$v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+				$v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 'ที่ผ่านมา' : '');
 			} else {
 				unset($string[$k]);
 			}
 		}
 
 		if (!$full) $string = array_slice($string, 0, 1);
-		return $string ?  ' เมื่อ' . implode(', ', $string) : 'เดี๋ยวนี้';
+		return $string ?  ' เมื่อ ' . implode(', ', $string) : 'เดี๋ยวนี้';
 	}
 }
 ?>

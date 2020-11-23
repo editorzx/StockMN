@@ -8,4 +8,4 @@
 <script src="vendors/@coreui/utils/js/coreui-utils.js"></script>
 <script src="vendors/js/main.js"></script>
 
-<script src="kdxr.js"></script>
+<script src="kdxr.js?v=<?php echo date("Ymdhisa");?>"></script>

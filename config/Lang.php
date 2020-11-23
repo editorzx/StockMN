@@ -6,6 +6,8 @@ define("IS_MEDIC","แพทย์");
 
 define("EXPORTMEDICAL_STRING","คุณ %s ได้ทำการเบิก %s ออกจากคลังเวชภัณฑ์เป็นจำนวน %u %s คิดเป็นเงิน %u บาท");
 
+define("DETAIL_MEDICAL","ยาสมุนไพร <font color=\"#bf9e0b\"> %s </font> อยู่ในคลัง <font color=\"red\"> %u </font> %s อยู่ในยาสมุดไพรชนิด  <font color=\"#6cff03\"> %s </font>");
+
 define("MINIMUM_HERBAL", 15);
 define("ALERT_MAXIMUM", 3);
 
@@ -25,10 +27,10 @@ define("MENU_LOGOUT","ออกจากระบบ");
 define('MENUHEAD' , 'จัดการ');
 define('MENU_MANAGEMENT', array(
     ['ผู้ใช้','officers_list'],
-    ['ยาสมุนไพร','*'],
-	['เวชภัณฑ์','*'],
-	['คลังใน','*'],
-	['คลังนอก','*'],
+    ['ข้อมูลยาสมุนไพร','herbal-info'],
+	['ข้อมูลเวชภัณฑ์','medical-info'],
+	//['คลังใน','*'],
+	//['คลังนอก','*'],
 ));
 
 define('MENUHEAD2' , 'จัดการคลังใน');
