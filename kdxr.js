@@ -18,11 +18,11 @@ $(document).ready(function() {
 		var couting = $('#items option:selected').attr('count-data');
 		var quantity = parseInt($('#quantity').val());
 		var price = parseFloat($('#price').val());
-		var expiredate = $('#expiredate').val() + ' ' + $('#expiretime').val();
+		var expiredate = $('#expiredate').val() /*+ ' ' + $('#expiretime').val()*/;
 		var lenght = arraydrug.length;
 		var partner = $('#partner option:selected').val();
 		var found = false;
-		if($.trim($('#expiredate').val()) == '' || $.trim($('#expiretime').val()) == '') {
+		if($.trim($('#expiredate').val()) == '' /*|| $.trim($('#expiretime').val()) == ''*/) {
 			alert('กรุณาระบุวันที่ให้ถูกต้อง');
 			return;
 		}
@@ -83,6 +83,18 @@ $(document).ready(function() {
 			//$("#index").val(idh);
 		}
 	})
+	
+	$('body').on("click.li", '#list-m', function () {
+		let idh = $(this).attr('data-id');
+		if(idh){
+			//console.log("TESTxxzs " + idh);
+			
+			$(location).attr('href', 'index?p=check_stock&idm='+idh)
+			//$('#myModal').modal('show');
+			//$("#index").val(idh);
+		}
+	})
+	
 	$('body').on("click.btn", '#addsql', function () {
 		if(arraydrug.length !== 0)
 		{
@@ -158,6 +170,14 @@ $(document).ready(function() {
 	}
 	
 	if(get_url === "officers_list"){
+		var get_id = url.searchParams.get("id");
+		//$('#myModal').modal('toggle');
+		if(get_id)
+			$('#myModal').modal('show');
+		//$('#myModal').modal('hide');
+	}
+	
+	if(get_url === "herbal-info" || get_url === "medical-info"){
 		var get_id = url.searchParams.get("id");
 		//$('#myModal').modal('toggle');
 		if(get_id)
@@ -241,6 +261,7 @@ $(document).ready(function() {
 	
 	$('body').on("click", '#add_export_medical', function () {
 		var name = $('#items option:selected').attr('name-data');
+		var unitprice = $('#items option:selected').attr('unit-price');
 		var id = $('#items option:selected').val();
 		var desc = $('#items option:selected').attr('desc-data');
 		var max = $('#items option:selected').attr('maximum-data');
@@ -283,6 +304,9 @@ $(document).ready(function() {
 			'</td>'+
 			'<td>'+
 				'<div id="price">'+price+'</div>'+
+			'</td>'+
+			'<td>'+
+				'<div>'+unitprice+'</div>'+
 			'</td>'+
 			'<td class="text-center">'+
 				'<div><button type="button" id="deletemedical" class="form-control bg-dark text-white" data-button-delete-id="'+ lenght +'">ลบ</button></div>'+

@@ -18,6 +18,20 @@
 		}
 		echo "<script type='text/javascript'>alert('$msg');</script>";
 		unset($_REQUEST['id']);
+	}elseif(isset($_GET['del_id'])){
+		$msg = '';
+		switch ($functions->DeleteInfoMedical($_GET['del_id'])) {
+		  case 0:
+			$msg = 'ไม่สำเร็จ';
+			break;
+		  case 1:
+			$msg = 'แก้ไขข้อมูลเรียบร้อย';
+			break;
+		  default:
+			$msg = 'ไม่สำเร็จ';
+		}
+		echo "<script type='text/javascript'>alert('$msg');</script>";
+		header("Location: index?p=edit_medical");
 	}
 
 ?>
@@ -40,6 +54,7 @@
 							<th class="text-center">หน่วยนับ</th>
                             <th>ราคา</th>
 							<th class="text-center">วันที่นำเข้า</th>
+							<th class="text-center"></th>
 							<th class="text-center"></th>
                           </tr>
                         </thead>
@@ -74,6 +89,13 @@
 								</td>
 								<td>
 									<a href="index?p=edit_medical&id=<?php echo $row["ID"];?>"><button class="form-control" type="button">EDIT</button></a>
+								</td>
+								<td>
+								<!--
+
+								<a href="index?p=edit_medical&del_id=<?php echo $row["ID"];?>"><button class="form-control" type="button">REMOVE</button></a>
+								
+								-->
 								</td>
 							</tr>
 							<?php

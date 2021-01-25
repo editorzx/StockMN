@@ -5,8 +5,9 @@ define("IS_ADMIN","ผู้ดูแลระบบ");
 define("IS_MEDIC","แพทย์");
 
 define("EXPORTMEDICAL_STRING","คุณ %s ได้ทำการเบิก %s ออกจากคลังเวชภัณฑ์เป็นจำนวน %u %s คิดเป็นเงิน %u บาท");
+define("DETAIL_MEDICAL","เวชภัณฑ์ <font color=\"#bf9e0b\"> %s </font> อยู่ในคลัง <font color=\"red\"> %u </font> %s ราคานำจ่ายคือ  <font color=\"#6cff03\"> %s </font> บาท");
 
-define("DETAIL_MEDICAL","ยาสมุนไพร <font color=\"#bf9e0b\"> %s </font> อยู่ในคลัง <font color=\"red\"> %u </font> %s อยู่ในยาสมุดไพรชนิด  <font color=\"#6cff03\"> %s </font>");
+define("DETAIL_HERBAL","ยาสมุนไพร <font color=\"#bf9e0b\"> %s </font> อยู่ในคลัง <font color=\"red\"> %u </font> %s อยู่ในยาสมุดไพรชนิด  <font color=\"#6cff03\"> %s </font>");
 
 define("MINIMUM_HERBAL", 15);
 define("ALERT_MAXIMUM", 3);
@@ -36,12 +37,13 @@ define('MENU_MANAGEMENT', array(
 define('MENUHEAD2' , 'จัดการคลังใน');
 define('MENU_MANAGEMENT2', array(
     ['นำเข้ายาสมุนไพร','imported_Herbalwarehouse'],
-    ['จ่ายยาสมุนไพร','*'],
+    //['จ่ายยาสมุนไพร','*'],
     ['ประวัติการนำเข้ายาสมุนไพร','edit_warehouse'],
+	['',''],
     ['นำเข้าเวชภัณฑ์','imported_medical'],
     ['ประวัติการนำเข้าเวชภัณฑ์','edit_medical'],
 	['เบิกเวชภัณฑ์','export_medical'],
-	['ประวัติการจ่ายเบิกจ่าย','history_list'],
+	['ประวัติการเบิกจ่าย','history_list'],
 	['ตรวจสอบยาสมุนไพรและเวชภัณฑ์','check_stock'],
 ));
 

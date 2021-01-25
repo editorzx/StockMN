@@ -258,6 +258,65 @@ class kdxr_function {
 		return ['result' => $posts];
 	}
 	
+	public function GettingHerbalInfo($sort){
+		$conn = self::selfconnectDb();
+		$post = array();
+		$sql = "SELECT a.Id , a.Name as Name , a.Desc as Desc_name , b.Name as Counting , c.Name as Type
+				FROM herbal_list a 
+				JOIN counting_list b on a.Id_Counting=b.Id
+				JOIN type_herbal c on a.Id_Type_Herbal=c.Id
+				ORDER BY a.Name $sort
+		";
+		$result = mysqli_query($conn, $sql);
+		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
+		{
+			$posts[] = $row;
+		}
+		return ['result' => $posts];
+	}
+	
+	public function GettingMedicalInfo($sort){
+		$conn = self::selfconnectDb();
+		$post = array();
+		$sql = "SELECT a.Id , a.Name as Name , a.Desc as Desc_name , b.Name as Counting
+				FROM medical_list a 
+				JOIN counting_list b on a.Id_Counting=b.Id
+				ORDER BY a.Name $sort
+		";
+		$result = mysqli_query($conn, $sql);
+		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
+		{
+			$posts[] = $row;
+		}
+		return ['result' => $posts];
+	}
+	
+	
+	public function GettingHerbalInfoForEdit($id){
+		$conn = self::selfconnectDb();
+		$post = array();
+		$sql = "SELECT a.Id , a.Name as Name , a.Desc as Desc_name , b.Name as Counting , c.Name as Type
+				FROM herbal_list a 
+				JOIN counting_list b on a.Id_Counting=b.Id
+				JOIN type_herbal c on a.Id_Type_Herbal=c.Id
+				where a.Id = '$id'
+		";
+		$result = mysqli_query($conn, $sql);
+		return mysqli_fetch_array($result,MYSQLI_ASSOC);
+	}
+	
+	public function GettingMedicalInfoForEdit($id){
+		$conn = self::selfconnectDb();
+		$post = array();
+		$sql = "SELECT a.Id , a.Name as Name , a.Desc as Desc_name , b.Name as Counting
+				FROM medical_list a 
+				JOIN counting_list b on a.Id_Counting=b.Id
+				where a.Id = '$id'
+		";
+		$result = mysqli_query($conn, $sql);
+		return mysqli_fetch_array($result,MYSQLI_ASSOC);
+	}
+	
 	
 	public function GetminimumHerbal(){ //ดึงค่ายาสมุนไพรเหลือน้อยจากสต๊อกใน
 		$conn = self::selfconnectDb();
@@ -337,10 +396,29 @@ class kdxr_function {
 		return ['result' => $posts];
 	}
 	
+	public function GetMedicalDetail($id){
+		$conn = self::selfconnectDb();
+		$post = array();
+		$sql = "SELECT a.name as Name, d.name as counting_name, a.id as idmedical, b.import_price as Price, b.import_quantity as Quantity
+				FROM medical_list a
+				LEFT JOIN imported_medical_info b ON a.id=b.id_medical
+				LEFT JOIN instock_medical c ON c.id_import_info=b.id
+				LEFT JOIN counting_list d ON d.id=a.id_counting
+				where a.Id = '$id'
+				ORDER BY a.Name
+				";
+		$result = mysqli_query($conn, $sql);
+		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
+		{
+			$posts[] = $row;
+		}
+		return ['result' => $posts];
+	}
+	
 	public function GetViewReSultMedical(){
 		$conn = self::selfconnectDb();
 		$post = array();
-		$sql = "SELECT SUM(c.quantity) AS value_sum, a.name as Name, d.name as counting_name
+		$sql = "SELECT SUM(c.quantity) AS value_sum, a.name as Name, d.name as counting_name, a.id as idmedical
 				FROM medical_list a
 				LEFT JOIN imported_medical_info b ON a.id=b.id_medical
 				LEFT JOIN instock_medical c ON c.id_import_info=b.id
@@ -359,7 +437,7 @@ class kdxr_function {
 	public function Getmedicalinstock(){
 		$conn = self::selfconnectDb();
 		$post = array();
-		$sql = "SELECT SUM(a.Quantity) AS value_sum, c.Name as Name , d.name as counting_name, c.id as medicalid, c.Desc as Desc_name
+		$sql = "SELECT SUM(a.Quantity) AS value_sum, c.Name as Name , d.name as counting_name, c.id as medicalid, c.Desc as Desc_name, (b.import_price/b.import_quantity) as UnitPrice
 				FROM instock_medical a
 				INNER JOIN imported_medical_info b ON b.id=a.id_import_info
 				INNER JOIN medical_list c ON c.id=b.id_medical
@@ -524,6 +602,13 @@ class kdxr_function {
 		return $query;
 	}
 	
+	public function DeleteInfoMedical($id){ //บันทึกค่าเวชภัณฑ์ล่าสุด ยังไม่เสร็จ
+		$conn = self::connectDb();
+		$sql = "delete from imported_medical_info id = '$id'";
+		$query = mysqli_query($conn, $sql);
+		return $query;
+	}
+	
 	public function EditInfoOfficers($id,$Email,$Name,$LastName){ 
 		$conn = self::selfconnectDb();
 		$sql = "update officers set Email = '$Email', Officer_name = '$Name', Officer_lastname = '$LastName' where Id = '$id'";
@@ -534,6 +619,34 @@ class kdxr_function {
 	public function DeleteOfficers($id){ 
 		$conn = self::selfconnectDb();
 		$sql = "delete from Officers where Id = '$id'";
+		$query = mysqli_query($conn, $sql);
+		return $query;
+	}
+	
+	public function EditInfoHerbal($id,$Name,$Desc){ 
+		$conn = self::selfconnectDb();
+		$sql = "update herbal_list set Name = '$Name', `Desc` = '$Desc' where Id = '$id'";
+		$query = mysqli_query($conn, $sql);
+		return $query;
+	}
+	
+	public function EditInfoMedicalList($id,$Name,$Desc){ 
+		$conn = self::selfconnectDb();
+		$sql = "update medical_list set Name = '$Name', `Desc` = '$Desc' where Id = '$id'";
+		$query = mysqli_query($conn, $sql);
+		return $query;
+	}
+	
+	public function DeleteMedicalInfo($id){ 
+		$conn = self::selfconnectDb();
+		$sql = "delete from medical_list where Id = '$id'";
+		$query = mysqli_query($conn, $sql);
+		return $query;
+	}
+	
+	public function DeleteHerbalInfo($id){ 
+		$conn = self::selfconnectDb();
+		$sql = "delete from herbal_list where Id = '$id'";
 		$query = mysqli_query($conn, $sql);
 		return $query;
 	}

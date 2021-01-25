@@ -20,7 +20,7 @@
 										foreach ($result_getherballist['result'] as $row) 
 										{
 									?>
-											<option value="<?php  echo $row['medicalid']; ?>" name-data="<?php  echo $row['Name'];?>" maximum-data="<?php echo $row['value_sum']; ?>" count-data="<?php echo $row['counting_name']; ?>" desc-data="<?php  echo $row['Desc_name']; ?>"><?php  echo $row['Name'] . ' ('.$row['value_sum'].')'; ?> </option>
+											<option value="<?php  echo $row['medicalid']; ?>" unit-price="<?php echo floor($row['UnitPrice']) ?>" name-data="<?php  echo $row['Name'];?>" maximum-data="<?php echo $row['value_sum']; ?>" count-data="<?php echo $row['counting_name']; ?>" desc-data="<?php  echo $row['Desc_name']; ?>"><?php  echo $row['Name'] . ' ('.$row['value_sum'].')'; ?> </option>
 									<?php 
 										}
 									?>
@@ -56,6 +56,7 @@
                             <th class="text-center">จำนวน</th>
 							<th class="text-center">หน่วยนับ</th>
                             <th>ราคา(บาท)</th>
+							<th>ราคา/หน่วย</th>
 							<th class="text-right"></th>
                           </tr>
                         </thead>

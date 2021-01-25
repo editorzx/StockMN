@@ -16,18 +16,20 @@
 							<div class="form-group col-sm-2">
 								<select class="form-control" name="items" id="items" required>
 									<?php
-										$result_getherballist = $functions->Gettinglist('herbal_list');
+										$result_getherballist = $functions->GettingHerbalInfo('asc');
 										foreach ($result_getherballist['result'] as $row) 
 										{
 											//foreach ($row as $element)
 											//{
 									?>
-												<option value="<?php  echo $row['Id']; ?>" count-data="<?php echo $functions->GettingCount($row['Id_Counting'],'counting_list')['Name']; ?>" desc-data="<?php  echo $row['Desc']; ?>"><?php  echo $row['Name']; ?></option>
+												<option value="<?php  echo $row['Id']; ?>" count-data="<?php echo $row['Counting'] ?>" desc-data="<?php  echo $row['Desc_name']; ?>"><?php  echo $row['Name']; ?></option>
 									<?php 
 											//}
 										}
 									?>
+									
 							  </select>
+							  <span class="help-block">ยาสมุนไพร</span>
 							</div>
 							<div class="form-group col-sm-2">
 								<select class="form-control" name="partner" id="partner" required>
@@ -44,6 +46,7 @@
 										}
 									?>
 							  </select>
+							  <span class="help-block">คู่ค้า</span>
 							</div>
 							<div class="form-group col-sm-2">
 								<div class="col-md-12">
@@ -57,18 +60,20 @@
 									<span class="help-block">ราคา(บาท)</span>
 								</div>
 							</div>
-							<div class="form-group col-sm-2">
+							<div class="form-group col-sm-4">
 								<div class="col-md-12">
 									<input class="form-control" id="expiredate" type="date" name="expiredate" required>
 									<span class="help-block">วันหมดอายุ</span>
 								</div>
 							</div>
+							<!--
 							<div class="form-group col-sm-2">
 								<div class="col-md-12">
 									<input class="form-control required" id="expiretime" type="time" name="expiretime" required>
 									<span class="help-block">เวลาหมดอายุ</span>
 								</div>
 							</div>
+							-->
 						  </div>
 						   <div class="row">
 								<div class="form-group col-sm-12">

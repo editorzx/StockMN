@@ -49,7 +49,7 @@
 			$ix = 0;
 			foreach (MENU_MANAGEMENT2 as &$value) 
 			{
-				if($ix == 3){ echo "<li class=\"c-sidebar-nav-divider\"></li>"; $ix = 0;}
+				if($ix == 3){ echo "<hr class=\"c-sidebar-nav-divider\"></hr>"; $ix = 0;}
 			?>
 				<li class="c-sidebar-nav-item">
 					<a class="c-sidebar-nav-link" href="index?p=<?php echo $value[1]; ?>">

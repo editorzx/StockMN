@@ -136,7 +136,18 @@ if(!($_SESSION['admin']))
 													<a href="index?p=officers_list&id=<?php echo $row["Id"];?>"><button class="form-control" type="button">EDIT</button></a>
 												</td>
 												<td>
-													<a href="index?p=officers_list&remid=<?php echo $row["Id"];?>"><button class=" btn btn-danger" type="button">DELETE</button></a>
+													<?php 
+													if($_SESSION['token'] != $row['Token'])
+													{
+													?>
+													<a href="index?p=officers_list&remid=<?php echo $row["Id"];?>" onclick="return confirm('ยืนยันการลบผู้ใช้นี้?')">
+														<button class="btn btn-danger" type="button">
+															DELETE
+														</button>
+													</a>
+													<?php
+													}
+													?>
 												</td>
 											</tr>
 											<?php
@@ -193,8 +204,8 @@ if(!($_SESSION['admin']))
 							<input type="hidden" name="idp" value="<?php echo $_REQUEST['id']; ?>">
 					  </div>
 					  <div class="modal-footer">
-						<button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-						<button class="btn btn-primary" type="submit" name="entervalue">แก้ไข</button>
+						<button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
+						<button class="btn btn-primary" type="submit" onclick="return confirm('ยืนยันการแก้ไข?')" name="entervalue">แก้ไข</button>
 					  </div>
 					</div>
 				  </div>
