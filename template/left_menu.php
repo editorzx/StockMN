@@ -4,7 +4,7 @@
       </div>
       <ul class="c-sidebar-nav">
         <li class="c-sidebar-nav-item">
-			<a class="c-sidebar-nav-link" href="index.php">
+			<a class="c-sidebar-nav-link" href="index">
             <svg class="c-sidebar-nav-icon">
               <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-home"></use>
             </svg> 
@@ -66,23 +66,24 @@
 			<a class="c-sidebar-nav-link c-sidebar-nav-dropdown-toggle" href="#">
             <svg class="c-sidebar-nav-icon">
               <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-paragraph"></use>
-            </svg> <?php echo MENU_MANAGEMENT3[0]; ?>
+            </svg> <?php echo MENUHEAD3; ?>
 			</a>
           <ul class="c-sidebar-nav-dropdown-items">
-            <li class="c-sidebar-nav-item">
-				<a class="c-sidebar-nav-link" href="index.php?page=randomgold">
-					 <svg class="c-sidebar-nav-icon">
-					  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-star"></use>
-					</svg><?php echo MENU_MANAGEMENT3[1]; ?>
-				</a>
-			</li>
-			 <li class="c-sidebar-nav-item">
-				<a class="c-sidebar-nav-link" href="index.php?page=randompoint">
-					 <svg class="c-sidebar-nav-icon">
-					  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-star"></use>
-					</svg> <?php echo MENU_MANAGEMENT3[2]; ?>
-				</a>
-			</li>
+           <?php 
+			$ix = 0;
+			foreach (MENU_MANAGEMENT3 as &$value) 
+			{
+				if($ix == 3){ echo "<hr class=\"c-sidebar-nav-divider\"></hr>"; $ix = 0;}
+			?>
+				<li class="c-sidebar-nav-item">
+					<a class="c-sidebar-nav-link" href="index?p=<?php echo $value[1]; ?>">
+						 <?php echo $value[0]; ?>
+					</a>
+				</li>
+			<?php
+				$ix++;
+			}
+			?>
           </ul>
         </li>
 		<li class="c-sidebar-nav-item">
@@ -92,6 +93,7 @@
 				</svg> <?php echo MENU_MANAGEMENT4[0]; ?>
 			</a>
 		</li>
+				
         
         <li class="c-sidebar-nav-item mt-auto">
 			<a class="c-sidebar-nav-link c-sidebar-nav-link-danger" href="index?p=logout" onclick="return confirm('ต้องการออกจากระบบ?')">

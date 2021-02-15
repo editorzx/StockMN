@@ -15,9 +15,19 @@ if(isset($_REQUEST['data'])){
 	//$sqlinject->test($Email);
 	//var_dump($data);
 	if(isset($_REQUEST['type'])){
-		foreach($data as $value){
-			$pkid = $functions->exportMedicalData($functions->GetOffierStatusForInsert($_SESSION['token'])['result']['Id'],$value->quantity,$value->price);
-			$result = $functions->exportmedical($pkid,$value->id,$value->quantity);
+		if($_REQUEST['type'] == "herbal"){
+			foreach($data as $value){
+				$pkid = $functions->exportHerbalData();
+				$result = $functions->exportHerbal($pkid,$value->id,$value->quantity);
+				
+				//$rs2 = $functions->importHerbalOutstock($pkid, $value->quantity);
+			}
+		}
+		else{
+			foreach($data as $value){
+				$pkid = $functions->exportMedicalData($functions->GetOffierStatusForInsert($_SESSION['token'])['result']['Id'],$value->quantity,$value->price);
+				$result = $functions->exportmedical($pkid,$value->id,$value->quantity);
+			}
 		}
 	}
 	

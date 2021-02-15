@@ -10,7 +10,7 @@ $functions = new kdxr_function();
   <head>
   <?php include("template/header.php"); ?>
   </head>
-   <body class="c-app">
+   <body class="c-app c-dark-theme c-no-layout-transition">
    
 	<?php 
 		if(!isset($_SESSION["token"]) ) 
@@ -37,65 +37,10 @@ $functions = new kdxr_function();
         <main class="c-main">
           <div class="container-fluid">
             <div class="fade-in">
-				
-				 <div class="row">
-                <div class="col-md-12">
-                    
-					<?php
-						$result_list = $functions->GetminimumHerbal();
-						$ix = 0;
-						foreach ($result_list['result'] as $row) 
-						{		
-
-							$dafault_valoe = 0;
-							if($row['value_sum'] != 0)
-								$dafault_valoe = $row['value_sum'];
-							if($dafault_valoe < MINIMUM_HERBAL)
-							{
-					?>
-							<div class="alert alert-danger" role="alert">
-								<?php echo "ขณะนี้ยาสมุนไพร ". $row['Name']. " กำลังจะหมด คงเหลือในคลัง (" .$dafault_valoe.")";?>
-							</div>					
-					<?php 	
-							$ix++;
-							}
-							
-							if($ix >= ALERT_MAXIMUM)
-								break;
-						}
-					?>
-                </div>
-				</div>
-				
-				 <div class="row">
-                <div class="col-md-12">
-                    
-					<?php
-						$result_list = $functions->GetExpireHerbal();						
-						/*$timezone = new DateTimeZone("Asia/Bangkok");
-						$datetime = new DateTime();
-						$datetime->setTimezone($timezone);
-						print $datetime->format('Y/m/d H:i:s');*/
-						
-						foreach ($result_list['result'] as $row) 
-						{		
-							if(strtotime(date("Y/m/d H:i:s")) > strtotime($row['expire'] . "-5 days"))
-							{
-					?>
-							<div class="alert alert-warning" role="alert">
-								<?php echo "ขณะนี้ยาสมุนไพร ". $row['Name']. " หมดอายุวันที่ (" .date("Y/m/d",strtotime($row['expire'])).")";?>
-							</div>					
-					<?php 	
-							
-							}
-						}
-					?>
-                </div>
-				</div>
 				<!--INFO-->
               <div class="row">
                 <div class="col-sm-6 col-lg-6">
-                  <div class="card text-white bg-gradient-dark">
+                  <div class="card text-white bg-gradient-info">
                     <div class="card-body card-body pb-0 d-flex justify-content-between align-items-start">
                       <div>
                         <div class="text-value-lg"><?php echo $functions->GetCountDB('herbal_list');?></div>
@@ -110,7 +55,9 @@ $functions = new kdxr_function();
                         <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a></div>
                       </div>
                     </div>
-                    <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;"></div>
+                    <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+						<canvas class="chart" id="card-chart1" height="70"></canvas>
+                    </div>
                   </div>
                 </div>
                 <!-- /.col-->
@@ -174,9 +121,10 @@ $functions = new kdxr_function();
                   </div>
                 </div>-->
                 <!-- /.col-->
-              </div>
+            <!--  </div> -->
               <!-- /.row-->
              
+			 <!--
               <div class="row">
                 <div class="col-md-12">
                   <div class="card">
@@ -264,20 +212,20 @@ $functions = new kdxr_function();
                             </div>
                           </div>
                         </div>
-                        <!-- /.col-->
+
                         <hr class="mt-0">
                       </div>
-                      <!-- /.row-->
                       
                     </div>
                   </div>
                 </div>
-                <!-- /.col-->
-              </div>
+              </div> -->
+			  
               <!-- /.row-->
             </div>
           </div>
         </main>
+		
 		<?php include ('template/ending.php'); ?>
       </div>
     </div>

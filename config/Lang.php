@@ -47,10 +47,10 @@ define('MENU_MANAGEMENT2', array(
 	['ตรวจสอบยาสมุนไพรและเวชภัณฑ์','check_stock'],
 ));
 
+define('MENUHEAD3' , 'จัดการคลังนอก');
 define('MENU_MANAGEMENT3', array(
-    'จัดการคลังนอก',
-    'เบิกยาสมุนไพรจากคลังใน',
-    'จ่ายยาสมุนไพร',
+    ['เบิกยาสมุนไพรจากคลังใน', 'improveherbal'],
+    ['เบิกยาสมุนไพรจากคลังใน', 'improveherbal'],
 ));
 
 define('MENU_MANAGEMENT4', array(

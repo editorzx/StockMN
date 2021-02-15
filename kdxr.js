@@ -315,6 +315,62 @@ $(document).ready(function() {
 		}
     })
 	
+	$('body').on("click", '#add_export_herbal', function () {
+		var name = $('#items option:selected').attr('name-data');
+		var unitprice = $('#items option:selected').attr('unit-price');
+		var id = $('#items option:selected').val();
+		var desc = $('#items option:selected').attr('desc-data');
+		var max = $('#items option:selected').attr('maximum-data');
+		var couting = $('#items option:selected').attr('count-data');
+		var quantity = parseInt($('#quantity').val());
+		var price = parseFloat($('#price').val());
+		var lenght = arraymedical.length;
+		var partner = $('#partner option:selected').val();
+		var found = false;
+		
+		if(quantity > max){
+			alert('จำนวนยาไม่พอจ่าย');
+			return;
+		}
+
+		$.each(arraymedical, function (key, item) {
+			if(item.name === name){
+				found = true;
+				item.quantity = parseInt(item.quantity+quantity);
+				item.price = item.price + price;
+				$('#bodyforaddherbal > tbody').each(function() {
+					var quan = $(this).find('td #quan').eq(0).text(item.quantity);
+					var price = $(this).find('td #price').eq(0).text(item.price);
+				});
+			}
+		});
+		if(!found)
+		{
+			arraymedical.push({id,name,desc,quantity,price,partner});//id = medicalid, name = medicalname, 
+			$('#bodyforaddherbal > tbody:last-child').append('<tr>'+
+			'<td>'+
+				'<div id="name">'+name+'</div>'+
+				'<div class="small text-muted">'+desc+'</div>'+
+			'</td>'+
+			'<td class="text-center">'+
+				'<div id="quan">'+quantity+'</div>'+
+			'</td>'+
+			'<td class="text-center">'+
+				'<div>'+couting+'</div>'+
+			'</td>'+
+			'<td>'+
+				'<div id="price">'+price+'</div>'+
+			'</td>'+
+			'<td>'+
+				'<div>'+unitprice+'</div>'+
+			'</td>'+
+			'<td class="text-center">'+
+				'<div><button type="button" id="deletemedical" class="form-control bg-dark text-white" data-button-delete-id="'+ lenght +'">ลบ</button></div>'+
+			'</td>'+
+			'</tr>');
+		}
+    })
+	
 	$('body').on("click.btn", '#export_medical', function () {
 		if(arraymedical.length !== 0)
 		{
@@ -328,6 +384,26 @@ $(document).ready(function() {
 				success: function(data){
 					alert(data);
 					$("#bodyforaddmedical tr").empty();
+					arraymedical = [];
+					 location.reload();
+				}
+			});
+		}
+	})
+	
+	$('body').on("click.btn", '#export_herbal', function () {
+		if(arraymedical.length !== 0)
+		{
+			var jsonString = JSON.stringify(arraymedical);
+		    $.ajax({
+				type: "POST",
+				url: "ajax/export.php",
+				data: {data : jsonString, type : 'herbal'}, 
+				cache: false,
+
+				success: function(data){
+					alert(data);
+					$("#bodyforaddherbal tr").empty();
 					arraymedical = [];
 					 location.reload();
 				}

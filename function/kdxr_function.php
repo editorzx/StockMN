@@ -169,6 +169,104 @@ class kdxr_function {
 		return ['result' => $posts];
 	}
 	
+	////////////////
+	public function exportHerbalData(){
+		$conn = self::connectDb();
+		$sql = "insert into exported_herbal_intoout_data (date) values ('".date("Y-m-d H:i:s")."')";
+		$query = mysqli_query($conn, $sql);
+		return mysqli_insert_id($conn);
+	}
+	
+	public function exportHerbal($pkid,$id,$need){ //บันทึกการจ่ายจากเวชภัณฑ์
+		$result_list = self::getupdateHerbalStock($id);
+		$vl = 0;
+		foreach ($result_list['result'] as $row) 
+		{	
+			$getvl = $row['value_sum'];
+			$ids = $row['IDs'];
+			$idx = $row['IDx'];
+			if($vl < $need)
+			{
+				if($getvl != 0)
+				{
+					if($getvl >= $need)
+					{
+						$vl = $getvl + $vl;
+						$newx = 0;
+						if($vl >= $need){
+							$newx = $vl - $need;
+							$vl = $vl - $newx;
+							self::updateHerbalStock($idx,$newx);
+						}
+						self::exportHerbalInfo($pkid,$idx,$newx);
+					}
+					else{
+						$vl = $getvl + $vl;
+						$newx = 0;
+						if($vl >= $need){
+							$newx = $vl - $need;
+							$vl = $vl - $newx;
+							self::updateHerbalStock($idx,$newx);
+						}else{
+							self::deleteHerbalStock($idx);
+						}
+						self::exportHerbalInfo($pkid,$idx,$newx);
+						
+					}
+				}
+			}
+			else{
+				break;
+			}
+		}
+		
+		return header("Refresh:0");;
+	}
+	
+	public function getupdateHerbalStock($id){ //บันทึกค่าเวชภัณฑ์ล่าสุด ยังไม่เสร็จ
+		$conn = self::connectDb();
+		echo $id;
+		$sql = "SELECT a.quantity AS value_sum,a.id_import_info as IDs, a.id as IDx
+				FROM instock_herbal a
+				INNER JOIN imported_herbal_info b ON b.id = a.id_import_info
+				where b.id_herbal = '$id'
+				";
+		$result = mysqli_query($conn, $sql);
+		$posts = array();
+		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
+		{
+			$posts[] = $row;
+		}
+		return ['result' => $posts];
+	}
+	
+	public function updateHerbalStock($id,$quan){
+		$conn = self::connectDb();
+		$sql = "update instock_herbal  set quantity = '$quan' where id = '$id'";
+		$query = mysqli_query($conn, $sql);
+	}
+	
+	public function deleteHerbalStock($id){ //บันทึกค่าเวชภัณฑ์ล่าสุด ยังไม่เสร็จ
+		$conn = self::connectDb();
+		$sql = "update instock_herbal set quantity = 0 where id = '$id'";
+		$query = mysqli_query($conn, $sql);
+	}
+	
+	public function exportHerbalInfo ($pkid,$pkid2,$quan){ //บันทึกการจ่ายจากเวชภัณฑ์
+		$conn = self::connectDb();
+		$sql = "insert into exported_herbal_intoout_info (id_data,id_instock,quantity) values ('$pkid','$pkid2','$quan')";
+		$query = mysqli_query($conn, $sql);	
+		
+		self::importHerbalOutstock($pkid,$quan);
+	}
+	
+	public function importHerbalOutstock ($pkid,$quan){ //บันทึกการจ่ายจากเวชภัณฑ์
+		$conn = self::connectDb();
+		$sql = "insert into outstock_herbal (id_data,quantity) values ('$pkid','$quan')";
+		$query = mysqli_query($conn, $sql);
+	}
+	///////////////
+	
 	public function GettingCount($id,$table){ 
 		$conn = self::selfconnectDb();
 		
@@ -336,6 +434,26 @@ class kdxr_function {
 		return ['result' => $posts];
 	}
 	
+	
+	public function GetminimumHerbal_out(){ //ดึงค่ายาสมุนไพรเหลือน้อยจากสต๊อกใน
+		$conn = self::selfconnectDb();
+		$post = array();
+		$sql = "SELECT SUM(a.quantity) AS value_sum, d.name as Name
+				FROM exported_herbal_intoout_info a
+				LEFT JOIN instock_herbal b ON a.id_instock=b.id
+				LEFT JOIN imported_herbal_info c ON b.id_import_info=c.id
+				LEFT JOIN herbal_list d ON c.id_herbal=d.id
+				GROUP BY d.Name
+				ORDER BY d.id
+				";
+		$result = mysqli_query($conn, $sql);
+		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
+		{
+			$posts[] = $row;
+		}
+		return ['result' => $posts];
+	}
+	
 	public function GetExpireHerbal(){ //ดึงค่ายาสมุนไพรหมดอายุ
 		$conn = self::selfconnectDb();
 		$post = array();
@@ -425,6 +543,25 @@ class kdxr_function {
 				LEFT JOIN counting_list d ON d.id=a.id_counting
 				GROUP BY a.Name
 				ORDER BY a.Name
+				";
+		$result = mysqli_query($conn, $sql);
+		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
+		{
+			$posts[] = $row;
+		}
+		return ['result' => $posts];
+	}
+	
+	public function getHerbalImprove(){
+		$conn = self::selfconnectDb();
+		$post = array();
+		$sql = "SELECT SUM(a.Quantity) AS value_sum, c.Name as Name , d.name as counting_name, c.id as medicalid, c.Desc as Desc_name, (b.price/b.quantity) as UnitPrice
+				FROM instock_herbal a
+				INNER JOIN imported_herbal_info b ON b.id=a.id_import_info
+				INNER JOIN herbal_list c ON c.id=b.id_herbal
+				JOIN counting_list d ON d.id=c.id_Counting
+				GROUP BY c.id 
+				ORDER BY c.id
 				";
 		$result = mysqli_query($conn, $sql);
 		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
