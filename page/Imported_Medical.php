@@ -1,3 +1,7 @@
+<?php
+if(!isset($_SESSION["token"])) 
+	exit(0);
+?>
 <?php include ('template/left_menu.php'); ?>
 <div class="c-wrapper c-fixed-components">
 <?php include ('template/top_menu.php'); ?>
@@ -7,74 +11,27 @@
 		 
             <div class="fade-in">
               <div class="row">
-			  
-					<div class="col-lg-12" id="medical">
-					  <div class="card">
-						<div class="card-header"><strong>ADD</strong> <small>Form</small></div>
-						<div class="card-body">
-						  <div class="row">
-							<div class="form-group col-sm-4">
-								<select class="form-control" name="items" id="items" required>
-									<?php
-										$result_getherballist = $functions->Gettinglist('medical_list');
-										foreach ($result_getherballist['result'] as $row) 
-										{
-											//foreach ($row as $element)
-											//{
-									?>
-												<option value="<?php  echo $row['Id']; ?>" count-data="<?php echo $functions->GettingCount($row['Id_Counting'],'counting_list')['Name']; ?>" desc-data="<?php  echo $row['Desc']; ?>"><?php  echo $row['Name']; ?></option>
-									<?php 
-											//}
-										}
-									?>
-							  </select>
-							</div>
-							<div class="form-group col-sm-3">
-								<select class="form-control" name="partner" id="partner" required>
-									<?php
-										$result_getherballist = $functions->Gettinglist('partner_list');
-										foreach ($result_getherballist['result'] as $row) 
-										{
-											//foreach ($row as $element)
-											//{
-									?>
-												<option value="<?php  echo $row['id']; ?>"><?php  echo $row['name']; ?></option>
-									<?php 
-											//}
-										}
-									?>
-							  </select>
-							</div>
-							<div class="form-group col-sm-3">
-								<div class="col-md-12">
-									<input class="form-control" id="quantity" name="quantity" min="1" value="1" type="number" placeholder="จำนวน" required>
-									<span class="help-block">จำนวน</span>
-								</div>
-							</div>
-							<div class="form-group col-sm-2">
-								<div class="col-md-12">
-									<input class="form-control" id="price" name="price" min="1" value="1" type="number" placeholder="ราคา" required>
-									<span class="help-block">ราคา(บาท)</span>
-								</div>
-							</div>
-						  </div>
-						   <div class="row">
-								<div class="form-group col-sm-12">
-									<button class="form-control bg-dark text-white" type="button" id="addmedical">เพิ่ม</button>
-								</div>
-						   </div>
-						</div>
-					  </div>
-					</div>
 					
-					<div class="col-lg-12">
+					<div class="col-md-auto mb-1" id="medical"><!--offset-md-10--> 
+						<button class="btn btn-sm btn-square btn-behance" data-toggle="modal" data-target="#addmedicallist" type="button">
+							<svg class="c-icon mr-2">
+							<use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-thick-top"></use>
+							</svg>
+							<span>เพิ่มรายการเวชภัณฑ์</span>
+						</button>
+					</div>
+
+					
+					<div class="col-lg-12 mb-3">
 						<table class="table table-responsive-sm table-hover table-outline mb-0" id="bodyforaddmedical">
                         <thead class="thead-light">
                           <tr>
                             <th>ชื่อผลิตภัณฑ์</th>
+							<th>คู่ค้า</th>
+							<th>ล็อตสินค้า</th>
                             <th class="text-center">จำนวน</th>
 							<th class="text-center">หน่วยนับ</th>
-                            <th>ราคา(บาท)</th>
+                            <th class="text-right">ราคา(บาท)</th>
 							<th class="text-right"></th>
                           </tr>
                         </thead>
@@ -84,12 +41,12 @@
                       </table>
 					</div>
 					
-					<div class="col-lg-12" style="margin-top:20px;margin-bottom:30px;">
+					<div class="col-lg-12 mb-3">
 						<div class="card">
 							<div class="card-body">
 							  <div class="row">
 									<div class="form-group col-sm-12">
-										<button class="form-control bg-dark text-white" type="button" id="addsqlmedical">บันทึกลงฐานข้อมูล</button>
+										<button class="form-control bg-primary text-white" type="button" id="addsqlmedical">บันทึกลงฐานข้อมูล</button>
 									</div>
 								</div>
 							</div>

@@ -291,6 +291,23 @@ select {
   word-wrap: normal;
 }
 
+/*Select option color kdxr*/
+select.form-control::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+select.form-control::-webkit-scrollbar-track {
+  border: rgb(180, 180, 180);
+  background-color: #b8b8b8;
+}
+
+select.form-control::-webkit-scrollbar-thumb {
+  background-color: #302727;
+  border: 1px solid rgb(193, 193, 193);
+  border-radius: 10px;
+}
+
 button,
 [type="button"],
 [type="reset"],
@@ -5088,6 +5105,25 @@ select.form-control[size], select.form-control[multiple],textarea.form-control {
     background-color: rgba(201, 99, 255,1.0);
 }
 
+::-webkit-scrollbar {
+  width: 0.75em;
+  height: auto;
+}
+
+::-webkit-scrollbar-track {
+  border: rgb(180, 180, 180);
+  background-color: #b8b8b8;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #302727;
+  border: 1px solid rgb(193, 193, 193);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  box-shadow: inset 0 0 10px #000000;
+}
 
 .form-text {
   display: block;
@@ -7429,6 +7465,15 @@ html:not([dir="rtl"]) .input-group > .input-group-prepend > .btn, html:not([dir=
   background-color: #ebedef;
   border: 1px solid #c4c9d0;
   border-radius: 0.25rem;
+}
+
+.img-mainlogo {
+  padding: 0.25rem;
+  background-color: #ebedef;
+  border: 1px solid #ebedef;
+  border-radius: 0.75rem;
+  max-width: 60%;
+  max-height: auto;
 }
 
 .figure {
@@ -12673,23 +12718,23 @@ button.bg-danger:focus {
 }
 
 .bg-light {
-  background-color: #ebedef !important;
+  background-color: #f3f4f5 !important;
 }
 
 a.bg-light:hover, a.bg-light:focus,
 button.bg-light:hover,
 button.bg-light:focus {
-  background-color: #cfd4d8 !important;
+  background-color: #d6dade !important;
 }
 
 .bg-dark {
-  background-color: #636f83 !important;
+  background-color: #2f353a !important;
 }
 
 a.bg-dark:hover, a.bg-dark:focus,
 button.bg-dark:hover,
 button.bg-dark:focus {
-  background-color: #4d5666 !important;
+  background-color: #181b1e !important;
 }
 
 .bg-gradient-primary {
@@ -16875,6 +16920,9 @@ button.bg-gray-900:focus {
   white-space: nowrap !important;
 }
 
+.font-mini {
+	font-size : 0.1 em;
+}
 .text-truncate {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -17249,4 +17297,6 @@ a.text-dark:hover, a.text-dark:focus {
     color: inherit;
   }
 }
+
+
 /*# sourceMappingURL=style.css.map */

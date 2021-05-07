@@ -36,6 +36,7 @@ document.body.addEventListener('classtoggle', function (event) {
   }
 }); // eslint-disable-next-line no-unused-vars
 
+/*
 var cardChart1 = new Chart(document.getElementById('card-chart1'), {
   type: 'line',
   data: {
@@ -260,4 +261,5 @@ var mainChart = new Chart(document.getElementById('main-chart'), {
     }
   }
 });
+*/
 //# sourceMappingURL=main.js.map

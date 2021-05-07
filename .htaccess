@@ -14,3 +14,10 @@ RewriteRule ^(.*)\.[\d]{10}\.(css|js)$ $1.$2 [L]
 
 # Resolve .php file for extensionless PHP URLs
 #RewriteRule ^([^/.]+)$ $1.php [L]
+
+
+RewriteRule ^template/ - [F]
+RewriteRule ^page/ - [F]
+RewriteRule ^function/ - [F]
+RewriteRule ^controller/ - [F]
+RewriteRule ^config/ - [F]

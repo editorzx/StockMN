@@ -1,38 +1,41 @@
 <?php
-	if(isset($_POST['entervalue']))
-	{
-		$id = $_REQUEST['idp'];
-		$price = $_REQUEST['price'];
-		$quantity = $_REQUEST['quantity'];
-		
-		$msg = '';
-		switch ($functions->EditInfoMedical($id,$quantity,$price)) {
-		  case 0:
-			$msg = 'ไม่สำเร็จ';
-			break;
-		  case 1:
-			$msg = 'แก้ไขข้อมูลเรียบร้อย';
-			break;
-		  default:
-			$msg = 'ไม่สำเร็จ';
-		}
-		echo "<script type='text/javascript'>alert('$msg');</script>";
-		unset($_REQUEST['id']);
-	}elseif(isset($_GET['del_id'])){
-		$msg = '';
-		switch ($functions->DeleteInfoMedical($_GET['del_id'])) {
-		  case 0:
-			$msg = 'ไม่สำเร็จ';
-			break;
-		  case 1:
-			$msg = 'แก้ไขข้อมูลเรียบร้อย';
-			break;
-		  default:
-			$msg = 'ไม่สำเร็จ';
-		}
-		echo "<script type='text/javascript'>alert('$msg');</script>";
-		header("Location: index?p=edit_medical");
+if(!isset($_SESSION["token"])) 
+	exit(0);
+
+if(isset($_POST['entervalue']))
+{
+	$id = $_REQUEST['idp'];
+	$price = $_REQUEST['price'];
+	$quantity = $_REQUEST['quantity'];
+	
+	$msg = '';
+	switch ($functions->EditInfoMedical($id,$quantity,$price)) {
+	  case 0:
+		$msg = 'ไม่สำเร็จ';
+		break;
+	  case 1:
+		$msg = 'แก้ไขข้อมูลเรียบร้อย';
+		break;
+	  default:
+		$msg = 'ไม่สำเร็จ';
 	}
+	echo "<script type='text/javascript'>alert('$msg');</script>";
+	unset($_REQUEST['id']);
+}elseif(isset($_GET['del_id'])){
+	$msg = '';
+	switch ($functions->DeleteInfoMedical($_GET['del_id'])) {
+	  case 0:
+		$msg = 'ไม่สำเร็จ';
+		break;
+	  case 1:
+		$msg = 'แก้ไขข้อมูลเรียบร้อย';
+		break;
+	  default:
+		$msg = 'ไม่สำเร็จ';
+	}
+	echo "<script type='text/javascript'>alert('$msg');</script>";
+	header("Location: index?p=edit_medical");
+}
 
 ?>
 <?php include ('template/left_menu.php'); ?>

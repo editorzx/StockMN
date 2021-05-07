@@ -1,3 +1,7 @@
+<?php
+if(!isset($_SESSION["token"])) 
+	exit(0);
+?>
 <?php include ('template/left_menu.php'); ?>
 <div class="c-wrapper c-fixed-components">
 <?php include ('template/top_menu.php'); ?>

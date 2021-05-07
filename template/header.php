@@ -25,7 +25,8 @@
 <meta name="msapplication-TileImage" content="vendors/assets/favicon/ms-icon-144x144.png">
 <meta name="theme-color" content="#ffffff">
 <!-- Main styles for this application-->
-<link href="vendors/css/style.css" rel="stylesheet">
+
+<link href="vendors/css/style.css?v=<?php echo date("Ymdhis");?>" rel="stylesheet">
 <!-- Global site tag (gtag.js) - Google Analytics-->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.js"  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="  crossorigin="anonymous"></script>
@@ -42,3 +43,8 @@
   gtag('config', 'UA-118965717-5');
 </script>
 <link href="vendors/@coreui/chartjs/css/coreui-chartjs.css" rel="stylesheet">
+<link rel="stylesheet" href="vendors/sweetalert2/sweetalert2.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" href="https://animate.style/animate.min.css">

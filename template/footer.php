@@ -5,7 +5,10 @@
 <!--<![endif]-->
 <!-- Plugins and scripts required by this view-->
 <script src="vendors/@coreui/chartjs/js/coreui-chartjs.bundle.js"></script>
+<script src="vendors/js/charts.js?v=<?php echo date("Ymdhis");?>"></script>
 <script src="vendors/@coreui/utils/js/coreui-utils.js"></script>
-<script src="vendors/js/main.js"></script>
-
-<script src="kdxr.js?v=<?php echo date("Ymdhisa");?>"></script>
+<script src="vendors/js/main.js?v=<?php echo date("Ymdhis");?>"></script>
+<script src="vendors/js/tooltips.js"></script>
+<script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+<script src="kdxr.js?v=<?php echo date("Ymdhis");?>"></script>
+<script src="vendors/sweetalert2/sweetalert2.min.js"></script>

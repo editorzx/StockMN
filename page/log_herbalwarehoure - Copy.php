@@ -88,6 +88,7 @@
 					</div>
             </div>
           </div>
+		  
 		  <?php 
 			if(isset($_REQUEST['id']))
 			{
@@ -138,5 +139,6 @@
 		?>
 		</div>
 	   </main>
+	   <?php include ('template/ending.php'); ?>
 	  </div>
 	 </div>

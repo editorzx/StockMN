@@ -1,4 +1,6 @@
 <?php 
+if(!isset($_SESSION["token"])) 
+	exit(0);
 if(!($_SESSION['admin']))
 	header("Location: index");	
 ?>
@@ -53,11 +55,21 @@ if(!($_SESSION['admin']))
 						<div class="card">
 							<div class="card-header"><small>ข้อมูลยาสมุนไพร</small></div>
 							<div class="card-body">
-								<div class="dropdown">
-									<button class="btn btn-secondary dropdown-toggle" id="dropdownMenu2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">View Sorting</button>
-									<div class="dropdown-menu" aria-labelledby="dropdownMenu2" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 34px, 0px); top: 0px; left: 0px; will-change: transform;">
-									  <a class="dropdown-item" href="?p=herbal-info&sort=asc">ก-ฮ</a>
-									  <a class="dropdown-item" href="?p=herbal-info&sort=desc">ฮ-ก</a>
+								<div class="row justify-content-end">
+									<div class="col-md-auto dropdown">
+										<button class="btn btn-secondary dropdown-toggle" id="dropdownMenu2" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">มุมมองการดู</button>
+										<div class="dropdown-menu" aria-labelledby="dropdownMenu2" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 34px, 0px); top: 0px; left: 0px; will-change: transform;">
+										  <a class="dropdown-item" href="?p=herbal-info&sort=asc">ก-ฮ</a>
+										  <a class="dropdown-item" href="?p=herbal-info&sort=desc">ฮ-ก</a>
+										</div>
+									</div>
+									<div class="col-md-auto mb-1">
+										<button class="btn btn-sm btn-square btn-behance" data-toggle="modal" data-target="#addherbal" type="button">
+											<svg class="c-icon mr-2">
+											<use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-thick-top"></use>
+											</svg>
+											<span>เพิ่มยาสมุนไพร</span>
+										</button>
 									</div>
 								</div>
 								<table class="table table-responsive-sm table-hover table-outline mb-0">
@@ -119,49 +131,6 @@ if(!($_SESSION['admin']))
 					</div>
             </div>
           </div>
-		  
-		  
-		   <?php 
-			if(isset($_REQUEST['id']))
-			{
-				$result_list = $functions->GettingHerbalInfoForEdit($_REQUEST['id']);
-		  ?>
-		  <!--MODAL DIALOG-->
-		  <form action="index?p=herbal-info" method="post">
-			  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				  <div class="modal-dialog modal-lg" role="document">
-					<div class="modal-content">
-					  <div class="modal-header">
-						<h4 class="modal-title">แก้ไขผู้ใช้งาน</h4>
-						<button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-					  </div>
-					  <div class="modal-body">
-							<div class="form-group col-sm-12">
-								<div class="row">
-									<div class="col-md-6">
-										<span class="help-block">Name</span>
-										<input class="form-control" id="Name" name="Name" value="<?php echo $result_list['Name']; ?>" type="text" placeholder="Name" required>
-									</div>
-									<div class="col-md-6">
-										<span class="help-block">Desc_name</span>
-										<input class="form-control" id="Desc_name" name="Desc_name" value="<?php echo $result_list['Desc_name']; ?>" type="text" placeholder="Desc_name" required>
-									</div>
-								</div>
-							</div>
-							<input type="hidden" name="idp" value="<?php echo $_REQUEST['id']; ?>">
-					  </div>
-					  <div class="modal-footer">
-						<button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
-						<button class="btn btn-primary" type="submit" onclick="return confirm('ยืนยันการแก้ไข?')" name="entervalue">แก้ไข</button>
-					  </div>
-					</div>
-				  </div>
-				</div>
-			</form>
-		<?php
-			}
-		?>
-		  
         </main>
       </div>
 	  </div>

@@ -1,5 +1,8 @@
 <?php
 session_start();
+if(!isset($_SESSION["token"])) 
+	exit(0);
+
 include("../function/kdxr_function.php");
 require_once "../function/sql_inject.php";
 $bDestroy_session = TRUE;

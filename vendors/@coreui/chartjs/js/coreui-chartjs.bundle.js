@@ -7744,6 +7744,7 @@
 		},
 
 		acquireContext: function(item, config) {
+			console.log();
 			if (typeof item === 'string') {
 				item = document.getElementById(item);
 			} else if (item.length) {

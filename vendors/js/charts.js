@@ -16,6 +16,7 @@ var random = function random() {
 }; // eslint-disable-next-line no-unused-vars
 
 
+/*
 var lineChart = new Chart(document.getElementById('canvas-1'), {
   type: 'line',
   data: {
@@ -135,5 +136,5 @@ var polarAreaChart = new Chart(document.getElementById('canvas-6'), {
   options: {
     responsive: true
   }
-});
+});*/
 //# sourceMappingURL=charts.js.map

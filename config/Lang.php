@@ -9,10 +9,29 @@ define("DETAIL_MEDICAL","เวชภัณฑ์ <font color=\"#bf9e0b\"> %s </
 
 define("DETAIL_HERBAL","ยาสมุนไพร <font color=\"#bf9e0b\"> %s </font> อยู่ในคลัง <font color=\"red\"> %u </font> %s อยู่ในยาสมุดไพรชนิด  <font color=\"#6cff03\"> %s </font>");
 
-define("MINIMUM_HERBAL", 15);
-define("ALERT_MAXIMUM", 3);
+define("MINIMUM_HERBAL_DESC", array(
+	["ยาสมุนไพรคลังในกำลังจะหมด","ยาสมุนไพรคลังในคงเหลือน้อยหลายรายการ กรุณารีบไปตรวจสอบเพื่อทำการสั่งยาสมุนไพรใหม่"],
+	["ยาสมุนไพรคลังในกำลังจะหมดอายุ","ยาสมุนไพรคลังในใกล้จะหมดอายุหลายรายการ กรุณารีบไปตรวจสอบเพื่อทำการสั่งยาสมุนไพรใหม่"],
+	["ยาสมุนไพรคลังนอกเหลือน้อย", "มียาสมุนไพรบางรายการกำลังจะหมดจากคลังสินค้าด้านนอก กรุณารีบเบิกจากคลังใน"],
+	["ยาสมุนไพรคลังนอกกำลังจะหมด", "มีรายการยาสมุนไพรจากคลังนอกใกล้จะหมดคลังกรุณาเร่งรัดการเบิกจ่าย จากคลังใน"],
+));
 
+define("MINIMUM_HERBAL", 15);
 define("MINIMUM_MEDICAL", 15);
+define("ALERT_MAXIMUM", -1);
+
+
+///REPORT
+define("REPORT_INTOOUT_NAME", "รายงานการเบิกจ่ายยาสมุนไพรระหว่างวันที่ ");
+define("REPORT_INSTOCK_NAME", "รายงานยาสมุนไพรและเวชภัณฑ์คงเหลือสต๊อกใน ");
+define("REPORT_SELLHERBAL_NAME", "รายงานยาสมุนไพรและเวชภัณฑ์คงเหลือสต๊อกใน ");
+define("REPORT_IMPORTINSTOCK_NAME", "รายงานรายละเอียดการนำเข้ายาสมุนไพรและเวชภัณฑ์ ");
+define("REPORT_OUTSTOCK_NAME", "รายงานยาสมุนไพรคงเหลือสตีอกนอก ");
+
+define("GOBAL_NAME", "สำนักงานสาธารณสุขจังหวัดปราจีนบุรี");
+define("MINGOBAL_NAME", "ศูนย์ส่งเสริมสุขภาพแพทย์แผนไทย กลุ่มงานการแพทย์แผนไทยและการแพทย์ทางเลือก");
+//
+
 /*define("","");
 define("","");
 define("","");
@@ -30,31 +49,50 @@ define('MENU_MANAGEMENT', array(
     ['ผู้ใช้','officers_list'],
     ['ข้อมูลยาสมุนไพร','herbal-info'],
 	['ข้อมูลเวชภัณฑ์','medical-info'],
+	['ข้อมูลคู่ค้า', 'partner-info'],
+	['ข้อมูลประเภทยา', 'type-info'],
+	['ข้อมูลล็อต', 'lot-info'],
+	['ข้อมูลหน่วยนับ', 'counting-info'],
 	//['คลังใน','*'],
 	//['คลังนอก','*'],
 ));
 
 define('MENUHEAD2' , 'จัดการคลังใน');
+////////Name,List or link, icon///////
 define('MENU_MANAGEMENT2', array(
-    ['นำเข้ายาสมุนไพร','imported_Herbalwarehouse'],
-    //['จ่ายยาสมุนไพร','*'],
-    ['ประวัติการนำเข้ายาสมุนไพร','edit_warehouse'],
-	['',''],
-    ['นำเข้าเวชภัณฑ์','imported_medical'],
-    ['ประวัติการนำเข้าเวชภัณฑ์','edit_medical'],
+   /* ['นำเข้ายาสมุนไพร','imported_Herbalwarehouse'],
+		['ประวัติการนำเข้ายาสมุนไพร','edit_warehouse'],
+		['นำเข้าเวชภัณฑ์','imported_medical'],
+		['ประวัติการนำเข้าเวชภัณฑ์','edit_medical'],
 	['เบิกเวชภัณฑ์','export_medical'],
 	['ประวัติการเบิกจ่าย','history_list'],
-	['ตรวจสอบยาสมุนไพรและเวชภัณฑ์','check_stock'],
+	['ตรวจสอบยาสมุนไพรและเวชภัณฑ์','check_stock'], */
+	['ยาสมุนไพร', array(
+		['นำเข้ายาสมุนไพร', 'imported_Herbalwarehouse'],
+		['ข้อมูลการนำเข้ายาสมุนไพร', 'log_herbalwarehoure'],
+		['เบิกยาสมุนไพร', 'export_herbal'],
+	), 'cil-drop'],
+	['เวชภัณฑ์', array(
+		['นำเข้าเวชภัณฑ์','imported_medical'],
+		['ประวัติการนำเข้าเวชภัณฑ์','log_medicalwarehouse'],
+		['เบิกเวชภัณฑ์','export_medical'],
+		['ประวัติการเบิกจ่ายเวชภัณฑ์', 'history_list', 'cil-library'],
+	), 'cil-healing'],
+	['ตรวจสอบยาสมุนไพรและเวชภัณฑ์', 'check_stock', 'cil-list'], 
 ));
 
 define('MENUHEAD3' , 'จัดการคลังนอก');
 define('MENU_MANAGEMENT3', array(
-    ['เบิกยาสมุนไพรจากคลังใน', 'improveherbal'],
-    ['เบิกยาสมุนไพรจากคลังใน', 'improveherbal'],
+	['ยาสมุนไพร', array(
+		['จ่ายยาสมุนไพร', 'selling_herbal'],
+	), 'cil-leaf'],
+    ['ตรวจสอบยาสมุนไพร', 'check_outstock', 'cil-list'], 
 ));
 
+define('MENUHEAD4' , 'รายงานข้อมูล');
 define('MENU_MANAGEMENT4', array(
-    ' ตรวจสอบรายการ(REPORT)',
+	['รายงานทั้งหมด', 'report_all', 'cil-leaf'],
+	//['กราฟสรุปยอดการขายรายเดือน', 'report_sellmonthly', 'cil-leaf'],
 ));
 
 ?>

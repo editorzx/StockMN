@@ -1,4 +1,6 @@
 <?php 
+if(!isset($_SESSION["token"])) 
+	exit(0);
 if(!($_SESSION['admin']))
 	header("Location: index");	
 ?>
@@ -52,7 +54,7 @@ if(!($_SESSION['admin']))
 					<div class="col-lg-12 col-xl-12">
 						<div class="card">
 							<div class="card-header"> 
-								Container
+								
 							</div>
 							<div class="card-body">
 								<button class="btn mb-3 btn-primary" type="button" data-toggle="collapse" data-target="#viewofficers" aria-expanded="true">ดูรายชื่อ/แก้ไข</button>

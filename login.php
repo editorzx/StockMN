@@ -2,12 +2,19 @@
   <head>
   <?php include("template/header.php"); ?>
   </head>
-<body class="c-app flex-row align-items-center">
+<body class="c-app flex-row align-items-center bg-dark">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-8">
           <div class="card-group">
-            <div class="card p-4 bg-gradient-dark text-white">
+			<div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
+				<div class="card-body text-center">
+					<div>
+						<img class="img-mainlogo" src="vendors/assets/img/pho_home.png">
+					</div>
+				</div>
+			</div>
+            <div class="card p-4 bg-light">
               <div class="card-body">
 				<?php
 				session_start();
@@ -20,7 +27,7 @@
 				unset($_SESSION['statement']);
 				?>
 				<form id="frmlogin" action="ajax/login.php" method="post">
-					<h1>เข้าสู่ระบบ</h1>
+					<h1 class="text-dark">เข้าสู่ระบบ</h1>
 					</br>
 					<div class="input-group mb-3">
 						<div class="input-group-prepend">
@@ -44,12 +51,13 @@
 					</div>
 					<div class="row">
 					  <div class="col-12 text-right">
-						<button id="btnlogin" class="btn btn-outline-light px-4" type="submit">Login</button>
+						<button id="btnlogin" class="btn btn-outline-primary px-4" type="submit">Login</button>
 					  </div>
 					</div>
 				</form>
               </div>
             </div>
+			
           </div>
         </div>
       </div>
