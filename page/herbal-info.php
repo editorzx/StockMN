@@ -32,7 +32,7 @@ if(!($_SESSION['admin']))
 			$msg = 'ไม่สำเร็จ';
 			break;
 		  case 1:
-			$msg = 'ลบผู้ใช้เรียบร้อย';
+			$msg = 'ลบข้อมูลยาสมุนไพรเรียบร้อย';
 			break;
 		  default:
 			$msg = 'ไม่สำเร็จ';
@@ -110,12 +110,12 @@ if(!($_SESSION['admin']))
 												<?php echo $row['Type'];  ?>
 											</td>
 											<td>
-												<a href="index?p=herbal-info&id=<?php echo $row["Id"];?>"><button class="form-control" type="button">EDIT</button></a>
+												<a href="index?p=herbal-info&id=<?php echo $row["Id"];?>"><button class="form-control" type="button">แก้ไข</button></a>
 											</td>
 											<td>
 												<a href="index?p=herbal-info&remid=<?php echo $row["Id"];?>" onclick="return confirm('ยืนยันการลบ?')">
 													<button class="btn btn-danger" type="button">
-														DELETE
+														ลบ
 													</button>
 												</a>
 											</td>

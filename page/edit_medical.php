@@ -91,7 +91,7 @@ if(isset($_POST['entervalue']))
 									<?php echo $row['date']; ?>
 								</td>
 								<td>
-									<a href="index?p=edit_medical&id=<?php echo $row["ID"];?>"><button class="form-control" type="button">EDIT</button></a>
+									<a href="index?p=edit_medical&id=<?php echo $row["ID"];?>"><button class="form-control" type="button">แก้ไข</button></a>
 								</td>
 								<td>
 								<!--
@@ -121,7 +121,7 @@ if(isset($_POST['entervalue']))
 				  <div class="modal-dialog modal-lg" role="document">
 					<div class="modal-content">
 					  <div class="modal-header">
-						<h4 class="modal-title">แก้ไขประวัติการรับเข้า</h4>
+						<h4 class="modal-title">แก้ไขเวชภัณฑ์</h4>
 						<button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 					  </div>
 					  <div class="modal-body">
@@ -140,7 +140,7 @@ if(isset($_POST['entervalue']))
 							<input type="hidden" name="idp" value="<?php echo $_REQUEST['id']; ?>">
 					  </div>
 					  <div class="modal-footer">
-						<button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+						<button class="btn btn-secondary" type="button" data-dismiss="modal">ปิด</button>
 						<button class="btn btn-primary" type="submit" name="entervalue">บันทึกผล</button>
 					  </div>
 					</div>

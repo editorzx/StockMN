@@ -3,6 +3,7 @@
 	//countingAlert [1] = ยาสมุนไพรคลังในหมดอายุ
 	//countingAlert [2] = ยาสมุนไพรคลังนอกคงเหลือน้อย
 	//[3] = ยาสมุนไพรคลังนอกใกล้หมดอายุใน 5 วัน
+	//[4] = เวชภัณฑ์เหลือน้อย
 ?>
 <li class="c-header-nav-item dropdown d-md-down-none mx-2">
 	<a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -99,6 +100,28 @@
 				</div>
 				<div class="text-truncate font-weight-normal"><span class="text-danger">!</span> <?php echo MINIMUM_HERBAL_DESC[3][0]?></div>
 				<div class="small text-muted  text-truncate"><?php echo MINIMUM_HERBAL_DESC[3][1];?></div>
+			</div>
+		</a>
+		<?php
+			}
+		?>
+		<?php 
+		if(isset($countingAlert[4])){
+		?>
+		<a class="dropdown-item" href="#" data-toggle="modal" data-target="#minimumMedical">
+			<div class="message">
+				<div class="py-3 mfe-3 float-left">
+					<div class="c-avatar">
+						<img class="c-avatar-img" src="vendors/assets/img/avatars/1.png" alt="user@email.com">
+						<span class="c-avatar-status bg-success"></span>
+					</div>
+				</div>
+				<div>
+					<small class="text-muted">Alert</small>
+					<small class="text-muted float-right mt-1">Just now</small>
+				</div>
+				<div class="text-truncate font-weight-normal"><span class="text-danger">!</span> <?php echo MINIMUM_HERBAL_DESC[4][0]?></div>
+				<div class="small text-muted  text-truncate"><?php echo MINIMUM_HERBAL_DESC[4][1];?></div>
 			</div>
 		</a>
 		<?php

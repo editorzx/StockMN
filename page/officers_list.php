@@ -115,7 +115,7 @@ if(!($_SESSION['admin']))
 										</thead>
 										<tbody>
 											<?php
-												$result_list = $functions->Gettinglist('officers');
+												$result_list = $functions->getOfficersList();
 												foreach ($result_list['result'] as $row) 
 												{
 											?>
@@ -135,7 +135,7 @@ if(!($_SESSION['admin']))
 													<?php echo $functions->getAdmin($row['isAdmin']); ?>
 												</td>
 												<td>
-													<a href="index?p=officers_list&id=<?php echo $row["Id"];?>"><button class="form-control" type="button">EDIT</button></a>
+													<a href="index?p=officers_list&id=<?php echo $row["Id"];?>"><button class="form-control" type="button">แก้ไข</button></a>
 												</td>
 												<td>
 													<?php 
@@ -144,7 +144,7 @@ if(!($_SESSION['admin']))
 													?>
 													<a href="index?p=officers_list&remid=<?php echo $row["Id"];?>" onclick="return confirm('ยืนยันการลบผู้ใช้นี้?')">
 														<button class="btn btn-danger" type="button">
-															DELETE
+															ลบ
 														</button>
 													</a>
 													<?php

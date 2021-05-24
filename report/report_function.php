@@ -36,7 +36,7 @@ function generatePDF_2Page($title, $body, $body2, $filename, $headertitle){
 	$pdf->SetCreator("KDXR");
 	$pdf->SetAuthor('KDXR');
 	$pdf->SetTitle($title);
-	$pdf->SetFont('freeserif', '', 10, '', true);
+	$pdf->SetFont('freeserif', '', 8, '', true);
 
 	
 	$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, $title, $headertitle);

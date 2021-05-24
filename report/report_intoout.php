@@ -19,7 +19,7 @@ if(isset($_REQUEST['start']) && isset($_REQUEST['end'])){
 	$html_medical = file_get_contents('http://kdxr.xyz/stockmn/api/report_intoout.php?start='.$start_date.'&end='.$end_date.'&type=medical');
 
 	generatePDF_2Page(GOBAL_NAME, $html, $html_medical, 'report_intoout_'.date("Ymdhis").'.pdf', 
-						REPORT_INTOOUT_NAME . " " . $start_date . " - " . $end_date);
+						MINGOBAL_NAME);
 }else{
 	exit(0);
 }

@@ -71,7 +71,7 @@ if(isset($_GET['ids']))
 								  </p>							 
 								  <small class="text-muted">วันที่นำเข้า : <?php echo $row['Date'];?></small>
 								  </br>
-								 <small class="text-muted">วันหมดอายุ : <?php echo $row['Expire'];?></small>		
+								 <small class="text-muted">วันหมดอายุ : <?php echo  date('d/m/Y', strtotime($row['Expire']));?></small>		
 								</div>
 								<?php
 									}

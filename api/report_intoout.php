@@ -35,7 +35,9 @@ table{
 }
 
 </style>
-
+<h2 style="text-align:center;">
+รายงานรายละเอียดการเบิกยาสมุนไพรและเวชภัณฑ์จากคลังใน <?php echo $start . " ถึง " . $end;?>
+</h3>
 <?php
 	if($type === 'herbal')
 	{
@@ -45,8 +47,9 @@ table{
 	<thead>
 	  <tr>
 		<th style="width:5%;text-align: center;"></th>
-		<th style="width:38%;text-align: center;"><b>ชื่อยาสมุนไพร</b></th>
-		<th style="width:37%;text-align: center;">วันที่เบิก</th>
+		<th style="width:25%;text-align: center;"><b>ผู้เบิก</b></th>
+		<th style="width:25%;text-align: center;"><b>ชื่อยาสมุนไพร</b></th>
+		<th style="width:25%;text-align: center;">วันที่เบิก</th>
 		<th style="text-align: center;width:20%;">จำนวน</th>
 	  </tr>
 	</thead>
@@ -60,12 +63,15 @@ table{
 			<td style="width:5%;text-align: center;">
 				<?php echo ++$key;?>
 			</td>
-			<td style="width:38%;text-align: center;">
+			<td style="width:25%;text-align: center;">
+				<?php echo $row['FullName'] ?>
+			</td>
+			<td style="width:25%;text-align: center;">
 				<?php echo $row['HerbalName'] ?>
 			</td>
-			<td style="width:37%;text-align: center;">
+			<td style="width:25%;text-align: center;">
 				<?php 
-					echo $functions->thai_date_and_time(strtotime($row['Date'])); 
+					echo $functions->thai_date(strtotime($row['Date'])); 
 				?>
 			</td>
 			<td style="text-align: right;width:20%;">
@@ -85,8 +91,9 @@ table{
 	<thead>
 	  <tr>
 		<th style="width:5%;text-align: center;"></th>
-		<th style="width:38%;text-align: center;"><b>ชื่อเวชภัณฑ์</b></th>
-		<th style="width:37%;text-align: center;">วันที่เบิก</th>
+		<th style="width:25%;text-align: center;"><b>ผู้เบิก</b></th>
+		<th style="width:25%;text-align: center;"><b>ชื่อยาสมุนไพร</b></th>
+		<th style="width:25%;text-align: center;">วันที่เบิก</th>
 		<th style="text-align: center;width:20%;">จำนวน</th>
 	  </tr>
 	</thead>
@@ -100,12 +107,15 @@ table{
 			<td style="width:5%;text-align: center;">
 				<?php echo ++$key;?>
 			</td>
-			<td style="width:38%;text-align: center;">
+			<td style="width:25%;text-align: center;">
+				<?php echo $row['FullName'] ?>
+			</td>
+			<td style="width:25%;text-align: center;">
 				<?php echo $row['MedicalName'] ?>
 			</td>
-			<td style="width:37%;text-align: center;">
+			<td style="width:25%;text-align: center;">
 				<?php 
-					echo $functions->thai_date_and_time(strtotime($row['Date'])); 
+					echo $functions->thai_date(strtotime($row['Date'])); 
 				?>
 			</td>
 			<td style="text-align: right;width:20%;">

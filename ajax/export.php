@@ -15,7 +15,8 @@ if(isset($_REQUEST['data'])){
 
 	if(isset($_REQUEST['type'])){
 		if($_REQUEST['type'] == "herbal"){
-			$pkid = $functions->exportHerbalData();
+			$officer_id = $functions->GetOffierStatusForInsert($_SESSION['token'])['result']['Id'];
+			$pkid = $functions->exportHerbalData($officer_id);
 			foreach($data as $value){
 				$result = $functions->exportHerbal($pkid,$value->id,$value->quantity);
 			}

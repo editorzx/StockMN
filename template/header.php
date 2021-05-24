@@ -6,7 +6,7 @@
 <meta name="description" content="StockManagement">
 <meta name="author" content="KDxR">
 <meta name="keyword" content="StockManagement">
-<title>StockManagement</title>
+<title><?php echo WEB_NAME;?></title>
 <link rel="apple-touch-icon" sizes="57x57" href="vendors/assets/favicon/apple-icon-57x57.png">
 <link rel="apple-touch-icon" sizes="60x60" href="vendors/assets/favicon/apple-icon-60x60.png">
 <link rel="apple-touch-icon" sizes="72x72" href="vendors/assets/favicon/apple-icon-72x72.png">

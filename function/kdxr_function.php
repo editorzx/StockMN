@@ -193,9 +193,9 @@ class kdxr_function {
 	
 	
 	////////////////
-	public function exportHerbalData(){
+	public function exportHerbalData($officer){
 		$conn = self::connectDb();
-		$sql = "insert into exported_herbal_intoout_data (date) values ('".date("Y-m-d H:i:s")."')";
+		$sql = "insert into exported_herbal_intoout_data (id_officers,date) values ('$officer','".date("Y-m-d H:i:s")."')";
 		$query = mysqli_query($conn, $sql);
 		return mysqli_insert_id($conn);
 	}
@@ -483,6 +483,18 @@ class kdxr_function {
 		return ['result' => $row];
 	}
 	
+	public function getOfficersList(){
+		$conn = self::selfconnectDb();
+		$posts = array();
+		$sql = "SELECT * FROM officers where status = 1";
+		$result = mysqli_query($conn, $sql);
+		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
+		{
+			$posts[] = $row;
+		}
+		return ['result' => $posts];
+	}
+	
 	public function Gettinglist($dbname){
 		$conn = self::selfconnectDb();
 		$posts = array();
@@ -502,6 +514,7 @@ class kdxr_function {
 				FROM herbal_list a 
 				JOIN counting_list b on a.Id_Counting=b.Id
 				JOIN type_herbal c on a.Id_Type_Herbal=c.Id
+				WHERE a.status = 1
 				ORDER BY a.Name $sort
 		";
 		$result = mysqli_query($conn, $sql);
@@ -518,6 +531,7 @@ class kdxr_function {
 		$sql = "SELECT a.Id , a.Name as Name , a.Desc as Desc_name , b.Name as Counting
 				FROM medical_list a 
 				JOIN counting_list b on a.Id_Counting=b.Id
+				WHERE a.status = 1
 				ORDER BY a.Name $sort
 		";
 		$result = mysqli_query($conn, $sql);
@@ -533,6 +547,7 @@ class kdxr_function {
 		$posts = array();
 		$sql = "SELECT id , name as Name
 				FROM partner_list 
+				where status = 1
 				ORDER BY name ASC
 		";
 		$result = mysqli_query($conn, $sql);
@@ -560,6 +575,7 @@ class kdxr_function {
 		$posts = array();
 		$sql = "SELECT id , Name as Name
 				FROM type_herbal 
+				WHERE status = 1
 				ORDER BY Name ASC
 		";
 		$result = mysqli_query($conn, $sql);
@@ -576,6 +592,7 @@ class kdxr_function {
 		$posts = array();
 		$sql = "SELECT id , Name as Name
 				FROM counting_list 
+				WHERE status = 1
 				ORDER BY Name ASC
 		";
 		$result = mysqli_query($conn, $sql);
@@ -591,6 +608,7 @@ class kdxr_function {
 		$posts = array();
 		$sql = "SELECT id , Name as Name
 				FROM lot_list 
+				WHERE status = 1
 				ORDER BY Name ASC
 		";
 		$result = mysqli_query($conn, $sql);
@@ -658,6 +676,24 @@ class kdxr_function {
 		";
 		$result = mysqli_query($conn, $sql);
 		return mysqli_fetch_array($result,MYSQLI_ASSOC);
+	}
+	
+	public function getMinimumMedical(){
+		$conn = self::selfconnectDb();
+		$posts = array();
+		$sql = "SELECT SUM(GREATEST(c.quantity, 0)) AS value_sum, a.name as Name
+				FROM medical_list a
+				LEFT JOIN imported_medical_info b ON a.id=b.id_medical
+				LEFT JOIN instock_medical c ON c.id_import_info=b.id
+				GROUP BY a.Name
+				order by value_sum ASC
+				";
+		$result = mysqli_query($conn, $sql);
+		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
+		{
+			$posts[] = $row;
+		}
+		return ['result' => $posts];
 	}
 	
 	
@@ -744,7 +780,7 @@ class kdxr_function {
 	public function getViewCheckStockHerbal(){
 		$conn = self::selfconnectDb();
 		$posts = array();
-		$sql = "SELECT SUM(GREATEST(c.quantity, 0)) AS value_sum, a.name as Name, d.name as counting_name, b.id_herbal as IDHERBAL
+		$sql = "SELECT SUM(GREATEST(c.quantity, 0)) AS value_sum, a.name as Name, d.name as counting_name, b.id_herbal as IDHERBAL, b.expire_date as expire
 				FROM herbal_list a
 				LEFT JOIN imported_herbal_info b ON a.id=b.id_herbal
 				LEFT JOIN instock_herbal c ON c.id_import_info=b.id
@@ -764,7 +800,7 @@ class kdxr_function {
 	public function GetHerbaldetail($id){
 		$conn = self::selfconnectDb();
 		$posts = array();
-		$sql = "SELECT a.name as Name, d.name as counting_name, b.id_herbal as IDHERBAL, b.expire_date as Expire, b.price as Price, b.quantity as Quantity, e.Name as Type
+		$sql = "SELECT a.name as Name, d.name as counting_name, b.id_herbal as IDHERBAL, b.expire_date as Expire, b.price as Price, c.quantity as Quantity, e.Name as Type
 				,b2.Date as Date
 				FROM herbal_list a
 				JOIN imported_herbal_info b ON a.id=b.id_herbal
@@ -786,7 +822,7 @@ class kdxr_function {
 	public function GetMedicalDetail($id){
 		$conn = self::selfconnectDb();
 		$posts = array();
-		$sql = "SELECT a.name as Name, d.name as counting_name, a.id as idmedical, b.import_price as Price, b.import_quantity as Quantity
+		$sql = "SELECT a.name as Name, d.name as counting_name, a.id as idmedical, b.import_price as Price, c.quantity as Quantity
 				FROM medical_list a
 				LEFT JOIN imported_medical_info b ON a.id=b.id_medical
 				LEFT JOIN instock_medical c ON c.id_import_info=b.id
@@ -821,10 +857,32 @@ class kdxr_function {
 		return ['result' => $posts];
 	}
 	
+	public function getResultHerbal_Outstock_Detail($id){
+		$conn = self::connectDb();
+		$posts = array();
+		$sql = "SELECT e.quantity AS value_sum, a.name as Name, f.name as counting_name, b.id_herbal as IDHERBAL, b.expire_date as expire
+				FROM herbal_list a
+				LEFT JOIN imported_herbal_info b ON a.id=b.id_herbal
+				LEFT JOIN instock_herbal c ON c.id_import_info=b.id
+				JOIN exported_herbal_intoout_info d ON d.id_instock=c.id
+				LEFT JOIN outstock_herbal e ON e.id_exported_info=d.id
+				LEFT JOIN counting_list f ON f.id=a.id_counting
+				LEFT JOIN type_herbal g ON g.id=a.id_type_herbal
+				WHERE (e.quantity > 0 or ISNULL(e.quantity)) and a.id = '$id'
+				ORDER BY a.Name ASC
+				";
+		$result = mysqli_query($conn, $sql);
+		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
+		{
+			$posts[] = $row;
+		}
+		return ['result' => $posts];
+	}
+	
 	public function getResultHerbal_OutStock_ForCheck(){
 		$conn = self::selfconnectDb();
 		$posts = array();
-		$sql = "SELECT SUM(e.quantity) AS value_sum, a.name as Name, f.name as counting_name, b.id_herbal as IDHERBAL
+		$sql = "SELECT SUM(e.quantity) AS value_sum, a.name as Name, f.name as counting_name, b.id_herbal as IDHERBAL, b.expire_date as expire, d.id as id_outstock
 				FROM herbal_list a
 				LEFT JOIN imported_herbal_info b ON a.id=b.id_herbal
 				LEFT JOIN instock_herbal c ON c.id_import_info=b.id
@@ -1021,13 +1079,42 @@ class kdxr_function {
 		return $query;
 	}
 	
+	public function updateInfoLogMdc($id, $price, $quan){
+		$conn = self::connectDb();
+		$sql = "update imported_medical_info  set Import_quantity = '$quan', import_price = '$price' where id = '$id'";
+		$query = mysqli_query($conn, $sql);
+		
+		$sql = "update instock_medical  set quantity = '$quan' where id_import_info = '$id'";
+		$query = mysqli_query($conn, $sql);
+		return $query;
+	}
+	
+	public function getInfoLogMedical($id){
+		$conn = self::connectDb();
+		$posts = array();
+		$sql = "select a.import_price as Price , a.import_quantity as Quantity, b.quantity as StockQuantity,
+				CASE
+						WHEN a.import_quantity <> b.quantity THEN 0
+						ELSE 1
+				END as `status`,
+				c.Name as name
+				from imported_medical_info a
+				join instock_medical b on a.id = b.id_import_info
+				join medical_list c on a.id_medical = c.id
+				where a.id = '$id'
+				";
+		$result = mysqli_query($conn, $sql);
+		return mysqli_fetch_array($result,MYSQLI_ASSOC);
+	}
+	
 	public function getLogMedical_Data($id){
 		$conn = self::connectDb();
 		$posts = array();
 		$sql = "SELECT b.Name as medicalName,  
 				c.`name` as partnerName, 
 				a.import_price as price , 
-				CONCAT_WS(\" \", a.import_quantity, d.name) as quantity
+				CONCAT_WS(\" \", a.import_quantity, d.name) as quantity,
+				a.id as id
 				FROM imported_medical_info a
 				JOIN medical_list b on a.id_medical = b.id
 				JOIN partner_list c on a.id_partner = c.id
@@ -1215,7 +1302,8 @@ class kdxr_function {
 	
 	public function DeleteOfficers($id){ 
 		$conn = self::selfconnectDb();
-		$sql = "delete from Officers where Id = '$id'";
+		//$sql = "delete from Officers where Id = '$id'";
+		$sql = "update officers set status = 0 where Id = '$id'";
 		$query = mysqli_query($conn, $sql);
 		return $query;
 	}
@@ -1264,60 +1352,84 @@ class kdxr_function {
 	
 	public function DeleteMedicalInfo($id){ 
 		$conn = self::selfconnectDb();
-		$sql = "delete from medical_list where Id = '$id'";
+		$sql = "update medical_list set status = 0 where Id = '$id'";
+		//$sql = "delete from medical_list where Id = '$id'";
 		$query = mysqli_query($conn, $sql);
 		return $query;
 	}
 	
 	public function DeleteHerbalInfo($id){ 
 		$conn = self::selfconnectDb();
-		$sql = "delete from herbal_list where Id = '$id'";
+		$sql = "update herbal_list set status = 0 where Id = '$id'";
+		//$sql = "delete from herbal_list where Id = '$id'";
 		$query = mysqli_query($conn, $sql);
 		return $query;
 	}
 	
 	public function deletepartnerInfo($id){ 
 		$conn = self::selfconnectDb();
-		$sql = "delete from partner_list where id = '$id'";
+		$sql = "update partner_list set status = 0 where id = '$id'";
+		//$sql = "delete from partner_list where id = '$id'";
 		$query = mysqli_query($conn, $sql);
 		return $query;
 	}
 	
 	public function deleteTypeInfo($id){ 
 		$conn = self::selfconnectDb();
-		$sql = "delete from type_herbal where id = '$id'";
+		//$sql = "delete from type_herbal where id = '$id'";
+		$sql = "update type_herbal set status = 0 where id = '$id'";
 		$query = mysqli_query($conn, $sql);
 		return $query;
 	}
 	
 	public function deleteCountingInfo($id){ 
 		$conn = self::selfconnectDb();
-		$sql = "delete from counting_list where id = '$id'";
+		$sql = "update counting_list set status = 0 where id = '$id'";
+		//$sql = "delete from counting_list where id = '$id'";
 		$query = mysqli_query($conn, $sql);
 		return $query;
 	}
 	
 	public function deleteLotInfo($id){ 
 		$conn = self::selfconnectDb();
-		$sql = "delete from lot_list where id = '$id'";
+		$sql = "update lot_list set status = 0 where id = '$id'";
+		//$sql = "delete from lot_list where id = '$id'";
 		$query = mysqli_query($conn, $sql);
 		return $query;
 	}
 	
+	public function getDetailHerbal(){
+		$conn = self::connectDb();
+		$sql = "select a.Name as herbalName , b.Name as countingName, c.`Name` as typeName
+				from herbal_list a
+				join counting_list b on b.id = a.Id_Counting
+				join type_herbal c on c.id = a.Id_Type_Herbal
+				";
+		$result = mysqli_query($conn, $sql);
+		$posts = array();
+		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
+		{
+			$posts[] = $row;
+		}
+		return ['result' => $posts];
+	}
+	
 	public function getHerbalIntoout_ForReport($start, $end){
 		$conn = self::connectDb();
-		$sql = "SELECT  e.`Name` as HerbalName, a.date as Date, Sum(b.quantity) as Quantity, f.`Name` as CountingName
+		$sql = "SELECT  e.`Name` as HerbalName, a.date as Date, Sum(b.quantity) as Quantity, f.`Name` as CountingName,
+				CONCAT_WS(\" \", g.Officer_name, g.Officer_lastname) AS `FullName`
 				from exported_herbal_intoout_data a
 				JOIN exported_herbal_intoout_info b on b.id_data=a.id
 				JOIN instock_herbal c on c.id=b.id_instock
 				JOIN imported_herbal_info d on d.id=c.id_import_info
 				JOIN herbal_list e on e.id=d.id_herbal
 				JOIN counting_list f on f.id=e.Id_Counting
-				-- WHERE b.quantity > 0 and (a.Date BETWEEN '$start' AND '$end')
-				WHERE  b.quantity > 0
+				JOIN officers g on g.id = a.id_officers
+				WHERE b.quantity > 0 and (a.Date BETWEEN '$start' AND '$end')
+				/*WHERE  b.quantity > 0
 						and (MONTH(a.Date) BETWEEN MONTH('$start') and MONTH('$end')) 
 						and (DAY(a.Date) BETWEEN DAY('$start') and DAY('$end'))
-						and (YEAR(a.Date) BETWEEN YEAR('$start') and YEAR('$end'))
+						and (YEAR(a.Date) BETWEEN YEAR('$start') and YEAR('$end'))*/
 				GROUP BY b.id
 				ORDER BY a.date ASC
 				-- LIMIT 30
@@ -1342,11 +1454,11 @@ class kdxr_function {
 				JOIN medical_list d on d.id = c2.id_medical
 				JOIN counting_list e on e.id = d.Id_Counting
 				JOIN officers f on f.id = a.id_officers
-				-- WHERE b.quantity > 0 and (a.out_date BETWEEN '$start' AND '$end')
-				WHERE  b.quantity > 0
+				WHERE b.quantity > 0 and (a.out_date BETWEEN '$start' AND '$end')
+				/*WHERE  b.quantity > 0
 						and (MONTH(a.out_date) BETWEEN MONTH('$start') and MONTH('$end')) 
 						and (DAY(a.out_date) BETWEEN DAY('$start') and DAY('$end'))
-						and (YEAR(a.out_date) BETWEEN YEAR('$start') and YEAR('$end'))
+						and (YEAR(a.out_date) BETWEEN YEAR('$start') and YEAR('$end'))*/
 				GROUP BY b.id
 				ORDER BY a.out_date ASC
 				-- LIMIT 30
@@ -1400,14 +1512,17 @@ class kdxr_function {
 		return ['result' => $posts];
 	}
 	
-	public function getViewImportedHerbal_ForReport(){
+	public function getViewImportedHerbal_ForReport($start,$end){
 		$conn = self::connectDb();
 		$posts = array();
 		$sql = "SELECT b.`Name` as herbalName , c.`Name` as typeName, a.price as price, a.quantity as quantity, a.expire_date as expireDate, d.date as importDate
+				, CONCAT_WS(\" \", e.Officer_name, e.Officer_lastname) AS `FullName`
 				FROM imported_herbal_info a
 				JOIN herbal_list b on a.id_herbal = b.id
 				JOIN type_herbal c on c.id = b.Id_Type_Herbal
 				JOIN imported_herbal_data d on d.id = a.id_import_data
+				JOIN officers e on d.id_officers = e.id
+				WHERE (d.date BETWEEN '$start' and '$end') 
 				ORDER BY d.date asc
 				";
 		$result = mysqli_query($conn, $sql);
@@ -1418,13 +1533,15 @@ class kdxr_function {
 		return ['result' => $posts];
 	}
 	
-	public function getViewImportedMedical_ForReport(){
+	public function getViewImportedMedical_ForReport($start,$end){
 		$conn = self::connectDb();
 		$posts = array();
-		$sql = "SELECT b.name as name, a.import_quantity as quantity, a.import_price as price, c.import_date as importDate
+		$sql = "SELECT b.name as name, a.import_quantity as quantity, a.import_price as price, c.import_date as importDate, CONCAT_WS(\" \", e.Officer_name, e.Officer_lastname) AS `FullName`
 				FROM imported_medical_info a
 				JOIN medical_list b on b.id = a.id_medical
 				JOIN imported_medical_data c on c.id = a.id_import_data
+				JOIN officers e on c.id_officer = e.id
+				WHERE (c.import_date BETWEEN '$start' and '$end') 
 				ORDER BY c.import_date asc
 				";
 		$result = mysqli_query($conn, $sql);
@@ -1614,6 +1731,25 @@ class kdxr_function {
 	public function updateUser($token,$pass){ 
 		$conn = self::connectDb();
 		$sql = "update officers  set Password = '$pass' where Token = '$token'";
+		$query = mysqli_query($conn, $sql);
+		return $query;
+	}
+	
+	
+	public function getWebSettings(){
+		$conn = self::selfconnectDb();
+		$posts = array();
+		$sql = "SELECT *
+				FROM web_settings 
+				where id = 1
+				";
+		$result = mysqli_query($conn, $sql);
+		return mysqli_fetch_array($result,MYSQLI_ASSOC);
+	}
+	
+	public function updateWebSettings($web_name,$minimum,$minimum_date){ 
+		$conn = self::connectDb();
+		$sql = "update web_settings set web_name = '$web_name', minStockAlert = '$minimum', mindateAlert = '$minimum_date' where id = 1";
 		$query = mysqli_query($conn, $sql);
 		return $query;
 	}

@@ -123,14 +123,39 @@ $(document).ready(function() {
 		$(this).closest("tr").remove();
 	})
 	
+	$('body').on("click.li", '#list-herbalout', function () {
+		let idh = $(this).attr('data-id');
+		if(idh){
+			$('#myInfoOutStock').modal('show');	 
+			$.ajax({
+				type: "POST",
+				url: "ajax/check_outstock",
+				data: { id: idh }
+			}).done(function( msg ) {
+				const data = JSON.parse(msg);
+				$("#parse_Herbalhere").html("")
+				if(data.code === 200){
+					const item = data.success.message.result
+					let data_text = ""
+					for (values in item){
+						data_text += "<div class=\"list-group-item list-group-item-action flex-column align-items-start\">"
+						data_text += "<p class=\"mb-1\">ยาสุมนไพร <font color='green'>" + item[values].Name +" </font> คงเหลือในคลัง  <font color='gold'>"+ item[values].value_sum + " </font> " + item[values].counting_name +"</p>"
+						data_text += "<small class=\"text-muted\">วันหมดอายุ : "+ formatdate(item[values].expire) +"</small>		"
+						data_text += "</div>"
+					}
+					$("#parse_Herbalhere").append(data_text)
+				}else{
+					swalAlert('Api Failed', 'error');
+				}
+			});
+		}
+	})
+
+	
 	$('body').on("click.li", '#list-e', function () {
 		let idh = $(this).attr('data-id');
 		if(idh){
-			//console.log("TESTxxzs " + idh);
-			
 			$(location).attr('href', 'index?p=check_stock&ids='+idh)
-			//$('#myModal').modal('show');
-			//$("#index").val(idh);
 		}
 	})
 	
@@ -206,7 +231,9 @@ $(document).ready(function() {
 		}
 		else
 		{
+			//$("[data-name]").hide().filter('[data-name*="'+str+'"]').show();
 			$("[data-name]").hide().filter('[data-name*="'+str+'"]').show();
+			$("[data-name]").filter('[data-date*="'+str+'"]').show();
 			$('[data-name]').removeClass('d-flex');
 			//$('[data-name]').addClass('embed-responsive');
 		}
@@ -411,7 +438,7 @@ $(document).ready(function() {
 				}
 				}).then((result) => {
 				if (result.isConfirmed) {
-					 $.ajax({
+					$.ajax({
 						type: "POST",
 						url: "ajax/insert.php",
 						data: {data : jsonString, type : 'medical'}, 
@@ -807,6 +834,7 @@ $(document).ready(function() {
 	$('body').on("click", '#viewResultLogMedical', function () {
 		let idh = $(this).attr('data-id');
 		$('#bodyForLogMedical > tbody').empty(); //clear old data
+		$('#editLogMedical_btn').attr('data-id', idh);
 		if(idh){
 			$.ajax({
 				type: "POST",
@@ -832,6 +860,9 @@ $(document).ready(function() {
 						'</td>'+
 						'<td class="text-center">'+
 							'<div id="x">'+item.quantity+'</div>'+
+						'</td>'+
+						'<td class="text-center">'+
+							'<div><button class="btn btn-sm btn-square btn-behance mt-1" type="button" id="editLogMedical_btn" data-id="'+item.id+'">แก้ไข</button></div>'+
 						'</td>'+
 						'</tr>');
 					});
@@ -861,7 +892,7 @@ $(document).ready(function() {
 			endDate: moment().startOf('day').add(1, 'day'),
 			maxDate: moment().startOf('day'),
 			locale: {
-			  format: 'YYYY-MM-DD'
+			  format: 'DD-MM-YYYY'
 			}
 		}/*, function(start, end, label) {
 			
@@ -895,7 +926,7 @@ $(document).ready(function() {
 			endDate: moment().startOf('day').add(1, 'day'),
 			maxDate: moment().startOf('day'),
 			locale: {
-			  format: 'YYYY-MM-DD'
+			  format: 'DD-MM-YYYY'
 			}
 		});
 		 
@@ -903,7 +934,40 @@ $(document).ready(function() {
 			$(location).attr('href', 'report/report_sell_daterange?start='+picker.startDate.format('YYYY-MM-DD')+'&end='+picker.endDate.format('YYYY-MM-DD'))
 		});
 		
+		$('input[name="import_range"]').daterangepicker({
+			timePicker: false,
+			startDate: moment().startOf('day'),
+			endDate: moment().startOf('day').add(1, 'day'),
+			maxDate: moment().startOf('day'),
+			locale: {
+			  format: 'DD-MM-YYYY'
+			}
+		});
+		 
+		$('input[name="import_range"]').on('apply.daterangepicker', function(ev, picker) {
+			$(location).attr('href', 'report/report_importinstock?start='+picker.startDate.format('YYYY-MM-DD')+'&end='+picker.endDate.format('YYYY-MM-DD'))
+		});		
 	}
+	
+	$('body').on("click.btn", '#editWebSettings', function () {
+		const web_name = $('#web_name').val();
+		const minimum = $('#minimum').val();
+		const minimum_date = $('#minimum_date').val();
+		
+		if(web_name === "" || minimum <= 0 || minimum_date <= 0){
+			swalAlert("มีข้อมูลที่ผิดพลาดกรุณาลองใหม่", "error")
+		}else{
+			$.ajax({
+				type: "POST",
+				url: "ajax/web_settings.php",
+				data: { web_name: web_name, minimum: minimum, minimum_date : minimum_date  }
+			}).done(function( msg ) {
+				
+				const data = JSON.parse(msg);
+				swalAlertConfirm(data.data.message, data.status)
+			});
+		}
+	})
 	
 	
 	$('body').on("click.btn", '#user_setting_return', function () {
@@ -921,13 +985,11 @@ $(document).ready(function() {
 				
 				const data = JSON.parse(msg);
 				
-				console.log(data);
 				swalAlert(data.data.message, data.status)
 			});
 		}
 	})
-	
-							
+					
 	
 	$('body').on("click.btn", '#editLogHerbal_btn', function () {		
 		let idh = $(this).attr('data-id');
@@ -965,6 +1027,69 @@ $(document).ready(function() {
 							$('#formInputHerbal').append('<button class="btn btn-primary mt-2" type="submit" id="apiResult_LogHerbal_btn" data-id="'+idh+'" data-status="'+item.status+'" onclick="return confirm(\'ยืนยันการแก้ไข?\')" >แก้ไข</button>');
 						else
 							$('#formInputHerbal').append('<button class="btn btn-danger mt-2" type="button" disabled>ยาถูกเบิกจ่ายออกไปแล้วไม่สามารถแก้ไขได้</button>');
+				}else{
+					swalAlert('Api Failed', 'error');
+				}
+			});
+		}else{
+			swalAlert('Api Failed', 'error');
+		}
+	})
+	
+	$('body').on("click.btn", '#editLogMedical_btn', function () {		
+		let idh = $(this).attr('data-id');
+		$('#formInputMedical').html('');
+		if(idh){
+			$('#logMedicalWarehouse').modal('hide');
+			$.ajax({
+				type: "GET",
+				url: "ajax/editLogMedical",
+				data: { id: idh }
+			}).done(function( msg ) {
+				const data = JSON.parse(msg);
+				if(data.code === 200){
+					$('#editLogMedical').modal('show');
+					const item = data.success.message
+						$('#formInputMedical').append('<div class="col-md-12">');
+						$('#formInputMedical').append('<span class="help-block">ชื่อยาสมุนไพร</span>');
+						$('#formInputMedical').append('<input class="form-control" id="name" name="name" value="'+item.name+'" type="text" placeholder="ชื่อยาสมุนไพร" disabled>');
+						$('#formInputMedical').append('</div>');
+						$('#formInputMedical').append('<div class="col-md-12">');
+						$('#formInputMedical').append('<span class="help-block">ราคา</span>');
+						$('#formInputMedical').append('<input class="form-control" id="price_mdc" name="price_mdc" value="'+item.Price+'" type="number" placeholder="ราคา">');
+						$('#formInputMedical').append('</div>');
+						$('#formInputMedical').append('<div class="col-md-12">');
+						$('#formInputMedical').append('<span class="help-block">จำนวน</span>');
+						$('#formInputMedical').append('<input class="form-control" id="quan_mdc" name="quan_mdc" value="'+item.Quantity+'" type="number" placeholder="จำนวน">');
+						$('#formInputMedical').append('</div>');
+						if(item.status === '1')
+							$('#formInputMedical').append('<button class="btn btn-primary mt-2" type="submit" id="apiResult_LogMedic_btn" data-id="'+idh+'" data-status="'+item.status+'" onclick="return confirm(\'ยืนยันการแก้ไข?\')" >แก้ไข</button>');
+						else
+							$('#formInputMedical').append('<button class="btn btn-danger mt-2" type="button" disabled>เวชภัณฑ์ถูกเบิกจ่ายออกไปแล้วไม่สามารถแก้ไขได้</button>');
+				}else{
+					swalAlert('Api Failed', 'error');
+				}
+			});
+		}else{
+			swalAlert('Api Failed', 'error');
+		}
+	})
+	
+	$('body').on("click.btn", '#apiResult_LogMedic_btn', function () {		
+		const iStatus = $(this).attr('data-status');
+		const id = $(this).attr('data-id');
+		const price = $('#price_mdc').val();
+		const quan = $('#quan_mdc').val();
+		if(iStatus && id){
+			$.ajax({
+				type: "POST",
+				url: "ajax/editLogMedical",
+				data: { id: id, price_mdc: price, quan_mdc: quan}
+			}).done(function( msg ) {
+				const data = JSON.parse(msg);
+				if(data.code === 200){
+					$('#editLogMedical').modal('hide');
+					swalAlert('ข้อมูลการนำเข้าถูกแก้ไขเรียบร้อยแล้ว', 'success');
 				}else{
 					swalAlert('Api Failed', 'error');
 				}

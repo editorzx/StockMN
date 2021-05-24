@@ -29,8 +29,7 @@ table{
 }
 
 </style>
-
-
+	<h2 style="text-align:center;">รายงานยาสมุนไพรคงเหลือคลังนอก</h2>
 	<h3 style="text-align:center;">ยาสมุนไพร</h3>
 	<table>
 	<thead>

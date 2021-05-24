@@ -38,6 +38,7 @@ table{
 	if($type === 'herbal')
 	{
 ?>
+	<h1 style="text-align:center;">รายงานยอดคงเหลือสต็อกใน</h1>
 	<h3 style="text-align:center;">ยาสมุนไพร</h3>
 	<table>
 	<thead>
