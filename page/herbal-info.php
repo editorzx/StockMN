@@ -10,9 +10,11 @@ if(!($_SESSION['admin']))
 		$id = $_REQUEST['idp'];
 		$Desc = $_REQUEST['Desc_name'];
 		$Name = $_REQUEST['Name'];
+		$Counting = $_REQUEST['Counting'];
+		$Type = $_REQUEST['Type'];
 		
 		$msg = '';
-		switch ($functions->EditInfoHerbal($id,$Name,$Desc)) {
+		switch ($functions->EditInfoHerbal($id,$Name,$Desc,$Counting,$Type)) {
 		  case 0:
 			$msg = 'ไม่สำเร็จ';
 			break;

@@ -23,6 +23,24 @@
 										<span class="help-block">Desc_name</span>
 										<input class="form-control" id="Desc_name" name="Desc_name" value="<?php echo $result_list['Desc_name']; ?>" type="text" placeholder="Desc_name" required>
 									</div>
+									<div class="col-md-6">
+										<span class="help-block">Counting</span>
+										<select class="form-control" name="Counting" id="Counting" required>
+											<?php $resultCounting = $functions->Gettinglist('counting_list');
+											foreach ($resultCounting['result'] as $row)
+											{
+												$selected = "";
+												if($row['Id'] == $result_list['idCounting'])
+													$selected = "selected";
+											?>
+											<option value="<?php  echo $row['Id']; ?>" <?php echo $selected;?>>
+												<?php echo $row['Name' ]; ?>
+											</option>
+											<?php 
+											}
+											?>
+										</select>
+									</div>
 								</div>
 							</div>
 							<input type="hidden" name="idp" value="<?php echo $_REQUEST['id']; ?>">

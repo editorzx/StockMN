@@ -24,7 +24,7 @@ if(isset($_REQUEST['data'])){
 		else{
 			$pkid = $functions->exportMedicalData($functions->GetOffierStatusForInsert($_SESSION['token'])['result']['Id']);
 			foreach($data as $value){
-				$result = $functions->exportmedical($pkid, $value->id, $value->quantity, $value->price);
+				$result = $functions->exportmedical($pkid, $value->id, $value->quantity, $value->price, $value->status);
 			}
 		}
 		

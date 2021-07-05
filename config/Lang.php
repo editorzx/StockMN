@@ -1,4 +1,6 @@
 <?php
+
+define("MY_URLS", "http://herb.pho.in.th/");
 define("ERROR_LOGIN", "การเข้าสู่ระบบผิดพลาด");
 define("ERROR_EMPTY_LOGIN", "กรุณาใส่ข้อมูลให้ครบถ้วน.");
 define("IS_ADMIN","ผู้ดูแลระบบ");
@@ -42,6 +44,7 @@ define('MENU_MANAGEMENT', array(
 	['ข้อมูลประเภทยา', 'type-info'],
 	['ข้อมูลล็อต', 'lot-info'],
 	['ข้อมูลหน่วยนับ', 'counting-info'],
+	['ข้อมูลสถานะการขาย', 'sell-status-info'],
 	//['คลังใน','*'],
 	//['คลังนอก','*'],
 ));
@@ -54,7 +57,7 @@ define('MENU_MANAGEMENT2', array(
 		['ข้อมูลการนำเข้ายาสมุนไพร', 'log_herbalwarehoure'],
 	), 'cil-drop'],
 	['เวชภัณฑ์', array(
-		['นำเข้าเวชภัณฑ์','imported_medical'],
+		['นำเข้าเวชภัณฑ์','imported_Medical'],
 		['ประวัติการนำเข้าเวชภัณฑ์','log_medicalwarehouse'],
 		['เบิกเวชภัณฑ์','export_medical'],
 		['ประวัติการเบิกจ่ายเวชภัณฑ์', 'history_list', 'cil-library'],

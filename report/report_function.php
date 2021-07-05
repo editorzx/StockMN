@@ -54,10 +54,10 @@ function generatePDF_2Page($title, $body, $body2, $filename, $headertitle){
 	
 	$pdf->AddPage();
 	$pdf->writeHTML($body, true, false, true, false, '');
-	
 	$pdf->AddPage();
 	$pdf->writeHTML($body2, true, false, true, false, '');
 	$pdf->lastPage();
+	
 	$pdf->Output($filename, 'I');
 }
 ?>

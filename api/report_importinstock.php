@@ -41,7 +41,7 @@ table{
 	if($type === 'herbal')
 	{
 ?>
-	<h2 style="text-align:center;">รายงานรายละเอียดการนำเข้ายาสมุนไพรและเวชภัณฑ์ระหว่างวันที่ <?php echo $start . " ถึง " . $end;?></h2>
+	<h2 style="text-align:center;">รายงานรายละเอียดการนำเข้ายาสมุนไพรและเวชภัณฑ์ระหว่างวันที่ <?php echo $functions->thai_date(strtotime($start)) . " ถึง " . $functions->thai_date(strtotime($end)) ;?></h2>
 	<h3 style="text-align:center;">ยาสมุนไพร</h3>
 	<table>
 	<thead>

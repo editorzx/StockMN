@@ -38,14 +38,15 @@ table{
 	if($type === 'herbal')
 	{
 ?>
-	<h1 style="text-align:center;">รายงานยอดคงเหลือสต็อกใน</h1>
+	<h1 style="text-align:center;">รายงานยอดคงเหลือสต็อกใน วันที่ <?php echo $functions->thai_date(strtotime(date('Y-m-d')));?></h1>
 	<h3 style="text-align:center;">ยาสมุนไพร</h3>
 	<table>
 	<thead>
 	  <tr>
 		<th style="width:5%;text-align: center;"></th>
 		<th style="width:55%;text-align: center;"><b>ชื่อยาสมุนไพร</b></th>
-		<th style="width:40%;text-align: center;">จำนวนคงเหลือ</th>
+		<th style="width:15%;text-align: right;">จำนวน</th>
+		<th style="width:25%;text-align: center;">หน่วยนับ</th>
 	  </tr>
 	</thead>
 	<tbody>
@@ -61,9 +62,14 @@ table{
 			<td style="width:55%;text-align: center;">
 				<?php echo $row['Name'] ?>
 			</td>
-			<td style="width:40%;text-align: center;">
+			<td style="width:15%;text-align: right;">
 				<?php 
-					echo max(0,$row['value_sum']) . " " . $row['counting_name']; 
+					echo max(0,$row['value_sum']); 
+				?>
+			</td>
+			<td style="width:25%;text-align: center;">
+				<?php 
+					echo $row['counting_name']; 
 				?>
 			</td>
 		</tr>
@@ -78,10 +84,11 @@ table{
 	<h3 style="text-align:center;">เวชภัณฑ์</h3>
 	<table>
 	<thead>
-	  <tr>
+	   <tr>
 		<th style="width:5%;text-align: center;"></th>
-		<th style="width:55%;text-align: center;"><b>ชื่อเวชภัณฑ์</b></th>
-		<th style="width:40%;text-align: center;">จำนวนคงเหลือ</th>
+		<th style="width:55%;text-align: center;"><b>ชื่อยาสมุนไพร</b></th>
+		<th style="width:15%;text-align: right;">จำนวน</th>
+		<th style="width:25%;text-align: center;">หน่วยนับ</th>
 	  </tr>
 	</thead>
 	<tbody>
@@ -97,9 +104,14 @@ table{
 			<td style="width:55%;text-align: center;">
 				<?php echo $row['Name'] ?>
 			</td>
-			<td style="width:40%;text-align: center;">
+			<td style="width:15%;text-align: right;">
 				<?php 
-					echo max(0,$row['value_sum']) . " " . $row['counting_name']; 
+					echo max(0,$row['value_sum']); 
+				?>
+			</td>
+			<td style="width:25%;text-align: center;">
+				<?php 
+					echo $row['counting_name']; 
 				?>
 			</td>
 		</tr>

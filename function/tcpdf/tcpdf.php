@@ -3514,6 +3514,9 @@ class TCPDF {
 			);
 			$this->write1DBarcode($barcode, 'C128', '', $cur_y + $line_width, '', (($this->footer_margin / 3) - $line_width), 0.3, $style, '');
 		}
+		//KDxR ADD DATE FOOTER
+		$this->Cell(0, 0, "" . date("d/m/Y H:i") . "", 'T', 0, 'L');
+		//
 		$w_page = isset($this->l['w_page']) ? $this->l['w_page'].' ' : '';
 		if (empty($this->pagegroups)) {
 			$pagenumtxt = $w_page.$this->getAliasNumPage().' / '.$this->getAliasNbPages();

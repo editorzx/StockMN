@@ -10,9 +10,10 @@ if(!($_SESSION['admin']))
 		$id = $_REQUEST['idp'];
 		$Desc = $_REQUEST['Desc_name'];
 		$Name = $_REQUEST['Name'];
+		$Counting = $_REQUEST['Counting'];
 		
 		$msg = '';
-		switch ($functions->EditInfoMedicalList($id,$Name,$Desc)) {
+		switch ($functions->EditInfoMedicalList($id,$Name,$Desc,$Counting)) {
 		  case 0:
 			$msg = 'ไม่สำเร็จ';
 			break;

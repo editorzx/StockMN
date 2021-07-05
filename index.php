@@ -9,6 +9,8 @@ define("MINIMUM_HERBAL", $web_settings['minstockAlert']);
 define("MINIMUM_MEDICAL", $web_settings['minstockAlert']);
 define("MINIMUM_DATE_ALERT", $web_settings['mindateAlert']);
 define("WEB_NAME", $web_settings['web_name']);
+	
+header('Content-Type: text/html; charset=utf-8');
 ?>
 <html lang="en">
   <head>
@@ -19,10 +21,17 @@ define("WEB_NAME", $web_settings['web_name']);
 	<?php 
 		if(!isset($_SESSION["token"]) ) 
 		{ 
-			header("Location: Login");	
+			header("Location: login");	
+			//echo '<script language="javascript">window.location.href = "./Login"</script>';
+			exit();
 		}else{
+			include("controller/web_settings.php");
+			if($functions->GetOfficerStatusByToken($_SESSION["token"])['result'] == 0){
+				echo "<script type='text/javascript'>alert('พบการเข้าสู่ระบบซ้ำซ้อน');location='index?p=logout'</script>";
+				//exit();
+			}
 			if(isset($_GET['p'])){
-				if(file_exists("page/".trim($_GET['p']).".php")); else include("page/404.php");
+				if(file_exists("page/".trim($_GET['p']).".php"))
 				{
 					require_once("page/".trim($_GET['p']).".php");
 					///Require controller
@@ -31,11 +40,9 @@ define("WEB_NAME", $web_settings['web_name']);
 						include("controller/".trim($_GET['p']).".php");
 					}
 				}
+				else include("page/404.php");
 			}else{ 
-				include("controller/web_settings.php");
-				if($functions->GetOfficerStatusByToken($_SESSION["token"])['result'] == 0){
-					echo "<script type='text/javascript'>alert('พบการเข้าสู่ระบบซ้ำซ้อน');location='index?p=logout'</script>";
-			}	 
+				
 	?>	
 		
 		<?php include ('template/left_menu.php'); ?>

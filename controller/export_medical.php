@@ -44,6 +44,23 @@
 							<span class="help-block text-muted font-xs">ชิ้น</span>
 						</div>
 					</div>
+					
+					<div class="form-group col-sm-12 row">
+						<label class="col-md-3 col-form-label">สถานะ</label>
+						<div class="col-md-9">
+							<select class="form-control" name="status" id="status" required>
+								<?php
+									$result_status = $functions->getStatusList();
+									foreach ($result_status as $row) 
+									{
+								?>
+										<option value="<?php  echo $row['id']; ?>"><?php  echo $row['name']; ?> </option>
+								<?php 
+									}
+								?>
+							</select>
+						</div>
+					</div>
 				</div>
 
 				<div class="modal-footer">

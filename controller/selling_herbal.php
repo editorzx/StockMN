@@ -55,8 +55,15 @@ if(!isset($_SESSION["token"]))
 						<label class="col-md-3 col-form-label">สถานะ</label>
 						<div class="col-md-9">
 							<select class="form-control" name="status" id="status" required>
-								<option value="0" selected>สนับสนุนใช้ในคลีนิค</option>
-								<option value="1">ออกหน่วยบริการ</option>
+								<?php
+									$result_status = $functions->getStatusList();
+									foreach ($result_status as $row) 
+									{
+								?>
+										<option value="<?php  echo $row['id']; ?>"><?php  echo $row['name']; ?> </option>
+								<?php 
+									}
+								?>
 							</select>
 						</div>
 					</div>

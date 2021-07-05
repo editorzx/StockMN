@@ -116,7 +116,7 @@ class kdxr_function {
 		return mysqli_insert_id($conn);
 	}
 	
-	public function exportmedical($pkid,$id,$need,$price){ //บันทึกการจ่ายจากเวชภัณฑ์
+	public function exportmedical($pkid, $id, $need, $price, $status){ //บันทึกการจ่ายจากเวชภัณฑ์
 		$result_list = self::getupdateMedicalStock($id);
 		$vl = 0;
 		$test = "";
@@ -143,7 +143,7 @@ class kdxr_function {
 							else
 								self::deleteMedicalStock($idx);
 						}
-						self::exportMedicalInfo($pkid,$idx,$vl,$price);
+						self::exportMedicalInfo($pkid,$idx,$vl,$price, $status);
 					}
 					else{						
 						$vl = $getvl + $vl;
@@ -160,7 +160,7 @@ class kdxr_function {
 							self::deleteMedicalStock($idx);
 						}
 						
-						self::exportMedicalInfo($pkid,$idx,$vl,$price);
+						self::exportMedicalInfo($pkid,$idx,$vl,$price, $status);
 					}
 				}
 			}
@@ -172,9 +172,9 @@ class kdxr_function {
 		return header("Refresh:0");
 	}
 	
-	public function exportMedicalInfo ($pkid,$pkid2,$quantity,$price){ //บันทึกการจ่ายจากเวชภัณฑ์
+	public function exportMedicalInfo ($pkid,$pkid2,$quantity,$price,$status){ //บันทึกการจ่ายจากเวชภัณฑ์
 		$conn = self::connectDb();
-		$sql = "insert into exported_medical_info (id_export_data,id_instock,quantity,out_price) values ('$pkid','$pkid2','$quantity','$price')";
+		$sql = "insert into exported_medical_info (id_export_data,id_instock,quantity,out_price,status_id) values ('$pkid','$pkid2','$quantity','$price','$status')";
 		$query = mysqli_query($conn, $sql);
 	}
 
@@ -400,7 +400,7 @@ class kdxr_function {
 	
 	public function sellingHerbalInfo ($pkid,$pkid2,$quan,$price,$status){ 
 		$conn = self::connectDb();
-		$sql = "insert into exported_herbal_sell_info (id_data,id_outstock,pending_quantity,price,status) values ('$pkid','$pkid2','$quan','$price','$status')";
+		$sql = "insert into exported_herbal_sell_info (id_data,id_outstock,pending_quantity,price,status_id) values ('$pkid','$pkid2','$quan','$price','$status')";
 		$query = mysqli_query($conn, $sql);	
 	}
 	
@@ -498,7 +498,7 @@ class kdxr_function {
 	public function Gettinglist($dbname){
 		$conn = self::selfconnectDb();
 		$posts = array();
-		$sql = "SELECT * FROM ". $dbname ."";
+		$sql = "SELECT * FROM ". $dbname ." where status = 1";
 		$result = mysqli_query($conn, $sql);
 		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
 		{
@@ -656,7 +656,7 @@ class kdxr_function {
 	public function GettingHerbalInfoForEdit($id){
 		$conn = self::selfconnectDb();
 		$posts = array();
-		$sql = "SELECT a.Id , a.Name as Name , a.Desc as Desc_name , b.Name as Counting , c.Name as Type
+		$sql = "SELECT a.Id , a.Name as Name , a.Desc as Desc_name , b.Name as Counting , c.Name as Type, a.Id_Counting as idCounting, a.Id_Type_Herbal as idType
 				FROM herbal_list a 
 				JOIN counting_list b on a.Id_Counting=b.Id
 				JOIN type_herbal c on a.Id_Type_Herbal=c.Id
@@ -669,7 +669,7 @@ class kdxr_function {
 	public function GettingMedicalInfoForEdit($id){
 		$conn = self::selfconnectDb();
 		$posts = array();
-		$sql = "SELECT a.Id , a.Name as Name , a.Desc as Desc_name , b.Name as Counting
+		$sql = "SELECT a.Id , a.Name as Name , a.Desc as Desc_name , b.Name as Counting, a.Id_Counting as idCounting
 				FROM medical_list a 
 				JOIN counting_list b on a.Id_Counting=b.Id
 				where a.Id = '$id'
@@ -786,6 +786,7 @@ class kdxr_function {
 				LEFT JOIN instock_herbal c ON c.id_import_info=b.id
 				LEFT JOIN counting_list d ON d.id=a.id_counting
 				LEFT JOIN type_herbal e ON e.id=a.id_type_herbal
+				WHERE a.status = 1
 				GROUP BY a.Name
 				ORDER BY a.Name
 				";
@@ -846,6 +847,7 @@ class kdxr_function {
 				LEFT JOIN imported_medical_info b ON a.id=b.id_medical
 				LEFT JOIN instock_medical c ON c.id_import_info=b.id
 				LEFT JOIN counting_list d ON d.id=a.id_counting
+				WHERE a.status = 1
 				GROUP BY a.Name
 				ORDER BY a.Name
 				";
@@ -1236,26 +1238,13 @@ class kdxr_function {
 	
 	public function GetCountDB($dbname){
 		$conn = self::selfconnectDb();
-		$sql = "SELECT * FROM ". $dbname ."";
+		$sql = "SELECT * FROM ". $dbname ." where status = 1";
 		$result = mysqli_query($conn, $sql);
 		$row_cnt = mysqli_num_rows($result);
 		mysqli_free_result($result);
 		return $row_cnt;
 	}
 	
-	private function connectDb()
-	{
-		include_once  ('../config/connect.php');
-		$conn = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
-		return $conn;
-	}
-	
-	private function selfconnectDb()
-	{
-		include_once  ('./config/connect.php');
-		$conn = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
-		return $conn;
-	}
 	
 	public function getAdmin($isAdmin){
 		$admin = '';
@@ -1308,9 +1297,9 @@ class kdxr_function {
 		return $query;
 	}
 	
-	public function EditInfoHerbal($id,$Name,$Desc){ 
+	public function EditInfoHerbal($id,$Name,$Desc,$Counting,$Type){ 
 		$conn = self::selfconnectDb();
-		$sql = "update herbal_list set Name = '$Name', `Desc` = '$Desc' where Id = '$id'";
+		$sql = "update herbal_list set Name = '$Name', `Desc` = '$Desc', `Id_Counting` = '$Counting', `Id_Type_Herbal` = '$Type' where Id = '$id'";
 		$query = mysqli_query($conn, $sql);
 		return $query;
 	}
@@ -1343,9 +1332,9 @@ class kdxr_function {
 		return $query;
 	}
 	
-	public function EditInfoMedicalList($id,$Name,$Desc){ 
+	public function EditInfoMedicalList($id,$Name,$Desc,$Counting){ 
 		$conn = self::selfconnectDb();
-		$sql = "update medical_list set Name = '$Name', `Desc` = '$Desc' where Id = '$id'";
+		$sql = "update medical_list set Name = '$Name', `Desc` = '$Desc', Id_Counting = '$Counting' where Id = '$id'";
 		$query = mysqli_query($conn, $sql);
 		return $query;
 	}
@@ -1416,6 +1405,8 @@ class kdxr_function {
 	
 	public function getHerbalIntoout_ForReport($start, $end){
 		$conn = self::connectDb();
+		$start = $start . " 00:00:00";
+		$end = $end . " 23:59:59";
 		$sql = "SELECT  e.`Name` as HerbalName, a.date as Date, Sum(b.quantity) as Quantity, f.`Name` as CountingName,
 				CONCAT_WS(\" \", g.Officer_name, g.Officer_lastname) AS `FullName`
 				from exported_herbal_intoout_data a
@@ -1445,8 +1436,11 @@ class kdxr_function {
 	
 	public function getMedicalIntoout_ForReport($start, $end){
 		$conn = self::connectDb();
+		$start = $start . " 00:00:00";
+		$end = $end . " 23:59:59";
 		$sql = "SELECT  d.`Name` as MedicalName, a.out_date as Date, Sum(b.quantity) as Quantity, e.`Name` as CountingName, 
-				CONCAT_WS(\" \", f.Officer_name, f.Officer_lastname) AS `FullName`
+				CONCAT_WS(\" \", f.Officer_name, f.Officer_lastname) AS `FullName`,
+				g.name as status
 				from exported_medical_data a
 				JOIN exported_medical_info b on b.id_export_data=a.id
 				JOIN instock_medical c on c.id=b.id_instock
@@ -1454,6 +1448,7 @@ class kdxr_function {
 				JOIN medical_list d on d.id = c2.id_medical
 				JOIN counting_list e on e.id = d.Id_Counting
 				JOIN officers f on f.id = a.id_officers
+				JOIN sell_status_list g on g.id = b.status_id
 				WHERE b.quantity > 0 and (a.out_date BETWEEN '$start' AND '$end')
 				/*WHERE  b.quantity > 0
 						and (MONTH(a.out_date) BETWEEN MONTH('$start') and MONTH('$end')) 
@@ -1514,6 +1509,8 @@ class kdxr_function {
 	
 	public function getViewImportedHerbal_ForReport($start,$end){
 		$conn = self::connectDb();
+		$start = $start . " 00:00:00";
+		$end = $end . " 23:59:59";
 		$posts = array();
 		$sql = "SELECT b.`Name` as herbalName , c.`Name` as typeName, a.price as price, a.quantity as quantity, a.expire_date as expireDate, d.date as importDate
 				, CONCAT_WS(\" \", e.Officer_name, e.Officer_lastname) AS `FullName`
@@ -1535,6 +1532,8 @@ class kdxr_function {
 	
 	public function getViewImportedMedical_ForReport($start,$end){
 		$conn = self::connectDb();
+		$start = $start . " 00:00:00";
+		$end = $end . " 23:59:59";
 		$posts = array();
 		$sql = "SELECT b.name as name, a.import_quantity as quantity, a.import_price as price, c.import_date as importDate, CONCAT_WS(\" \", e.Officer_name, e.Officer_lastname) AS `FullName`
 				FROM imported_medical_info a
@@ -1585,10 +1584,7 @@ class kdxr_function {
 				h.`Name` as HerbalName,
 				j.`name` as PartnerName,
 				k.`Name` as TypeName,
-				CASE
-					WHEN a.status = 0 THEN \"สนับสนุนใช้ในคลีนิค\"
-					ELSE \"ออกหน่วยบริการ\"
-				END as `Status`,
+				m.`name` as `Status`,
 				CONCAT_WS(\" \", a.pending_quantity, i.`Name`)  as Quantity,
 				a.price as Price,
 				b.pending_date as outDate,
@@ -1607,9 +1603,16 @@ class kdxr_function {
 				JOIN partner_list j on j.id = g.id_partner
 				JOIN type_herbal k on k.id = h.Id_Type_Herbal
 				JOIN lot_list l on l.id = g.id_lot
+				JOIN sell_status_list m on m.id = a.status_id
 				WHERE b.pending_date LIKE '$date%'
 				ORDER BY b.pending_date DESC
 				";
+		/*
+		CASE
+			WHEN a.status = 0 THEN \"สนับสนุนใช้ในคลีนิค\"
+			ELSE \"ออกหน่วยบริการ\"
+		END as `Status`,
+		*/
 		$result = mysqli_query($conn, $sql);
 		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
 		{
@@ -1621,15 +1624,14 @@ class kdxr_function {
 	
 	public function getViewSelledHerbalDateRange_ForReport($start,$end){
 		$conn = self::connectDb();
+		$start = $start . " 00:00:00";
+		$end = $end . " 23:59:59";
 		$posts = array();
 		$sql = "SELECT CONCAT_WS(\" \", c.Officer_name, c.Officer_lastname) AS `FullName`, 
 				h.`Name` as HerbalName,
 				j.`name` as PartnerName,
 				k.`Name` as TypeName,
-				CASE
-					WHEN a.status = 0 THEN \"สนับสนุนใช้ในคลีนิค\"
-					ELSE \"ออกหน่วยบริการ\"
-				END as `Status`,
+				m.`name` as `Status`,
 				CONCAT_WS(\" \", a.pending_quantity, i.`Name`)  as Quantity,
 				a.price as Price,
 				b.pending_date as outDate,
@@ -1648,6 +1650,7 @@ class kdxr_function {
 				JOIN partner_list j on j.id = g.id_partner
 				JOIN type_herbal k on k.id = h.Id_Type_Herbal
 				JOIN lot_list l on l.id = g.id_lot
+				JOIN sell_status_list m on m.id = a.status_id
 				WHERE (b.pending_date BETWEEN '$start' and '$end') 
 				ORDER BY b.pending_date DESC
 				";
@@ -1754,6 +1757,50 @@ class kdxr_function {
 		return $query;
 	}
 	
+	public function getStatusList(){
+		$conn = self::connectDb();
+		$posts = array();
+		$sql = "SELECT id, `name` from sell_status_list where isRemove <> 1";
+		$result = mysqli_query($conn, $sql);
+		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
+		{
+			$posts[] = $row;
+		}
+		return $posts;
+	}
+	
+	public function getStatusList_info($id){
+		$conn = self::selfconnectDb();
+		$posts = array();
+		$sql = "SELECT id, `name`
+				FROM sell_status_list 
+				where id = '$id'
+				";
+		$result = mysqli_query($conn, $sql);
+		return mysqli_fetch_array($result,MYSQLI_ASSOC);
+	}
+	
+	public function insertStatusList($Name){ 
+		$conn = self::connectDb();
+		$sql = "insert into sell_status_list (`name`) values ('$Name')";
+		$query = mysqli_query($conn, $sql);
+		return $query;
+	}
+	
+	public function editStatusList($id,$Name){ 
+		$conn = self::selfconnectDb();
+		$sql = "update sell_status_list set `name` = '$Name' where id = '$id'";
+		$query = mysqli_query($conn, $sql);
+		return $query;
+	}
+	
+	public function deleteStatusList($id){ 
+		$conn = self::selfconnectDb();
+		$sql = "update sell_status_list set isRemove = 1 where Id = '$id'";
+		$query = mysqli_query($conn, $sql);
+		return $query;
+	}
+	
 	
 	function time_elapsed_string($datetime, $full = false) {
 		$now = new DateTime;
@@ -1815,5 +1862,21 @@ class kdxr_function {
 		}
 		return $thai_date_return;   
 	} 
+	
+	private function connectDb()
+	{
+		include_once  ('../config/connect.php');
+		$conn = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
+		mysqli_set_charset($conn, CHARSET);
+		return $conn;
+	}
+	
+	private function selfconnectDb()
+	{
+		include_once  ('./config/connect.php');
+		$conn = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
+		mysqli_set_charset($conn, CHARSET);
+		return $conn;
+	}
 }
 ?>

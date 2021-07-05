@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	var arraydrug = [];
+	var arraymedical = [];
 	var url_string = window.location.href;
 	var url = new URL(url_string);
 	var get_url = url.searchParams.get("p");
@@ -23,6 +24,11 @@ $(document).ready(function() {
 				popup: 'animate__animated animate__fadeOutUp'
 			}
 		});
+	}
+	
+	function validateInput(input) {
+	  if (isNaN(input) || input < 0) {return 0;}
+	  return input;
 	}
 	
 	function swalAlertConfirm(data,type){
@@ -50,8 +56,8 @@ $(document).ready(function() {
 		var id = $('#items option:selected').val();
 		var desc = $('#items option:selected').attr('desc-data');
 		var couting = $('#items option:selected').attr('count-data');
-		var quantity = parseInt($('#quantity').val());
-		var price = parseFloat($('#price_val').val());
+		var quantity = validateInput(parseInt($('#quantity').val()));
+		var price = validateInput(parseFloat($('#price_val').val()));
 		var expiredate = $('#expiredate').val() /*+ ' ' + $('#expiretime').val()*/;
 		var lenght = arraydrug.length;
 		var partner = $('#partner option:selected').val();
@@ -59,8 +65,15 @@ $(document).ready(function() {
 		var loter = $('#loter option:selected').val();
 		var loter_name = $('#loter option:selected').attr('name-data');
 		var found = false;
+		
 		if($.trim($('#expiredate').val()) == '' /*|| $.trim($('#expiretime').val()) == ''*/) {
 			alert('กรุณาระบุวันที่ให้ถูกต้อง');
+			return;
+		}else if(price == 0 || typeof(price) === "undefined" || price == null ){
+			swalAlert('กรุณากรอกราคา', 'error');
+			return;
+		}else if(quantity == 0 || typeof(quantity) === "undefined" || quantity == null ){
+			swalAlert('กรุณากรอกจำนวน', 'error');
 			return;
 		}
 		arraydrug.forEach(function(item,key) {
@@ -282,7 +295,7 @@ $(document).ready(function() {
 	}
 		
 	if(get_url === "herbal-info" || get_url === "medical-info" || get_url === "partner-info" || get_url === "lot-info"
-		|| get_url === "type-info" || get_url === "lot-info" || get_url === "counting-info" 
+		|| get_url === "type-info" || get_url === "lot-info" || get_url === "counting-info" || get_url === "sell-status-info"
 	){
 		var get_id = url.searchParams.get("id");
 		//$('#myModal').modal('toggle');
@@ -346,20 +359,28 @@ $(document).ready(function() {
 	})
 	
 	//medical
-	var arraymedical = [];
+	
 	$('body').on("click", '#addmedical', function () {
 		var name = $('#items option:selected').text();
 		var id = $('#items option:selected').val();
 		var desc = $('#items option:selected').attr('desc-data');
 		var couting = $('#items option:selected').attr('count-data');
-		var quantity = parseInt($('#quantity').val());
-		var price = parseFloat($('#price_val').val());
+		var quantity = validateInput(parseInt($('#quantity').val()));
+		var price = validateInput(parseFloat($('#price_val').val()));
 		var lenght = arraymedical.length;
 		var partner = $('#partner option:selected').val();
 		var partner_name = $('#partner option:selected').attr('name-data');
 		var loter = $('#loter option:selected').val();
 		var loter_name = $('#loter option:selected').attr('name-data');
 		var found = false;
+		
+		if(price == 0 || typeof(price) === "undefined" || price == null ){
+			swalAlert('กรุณากรอกราคา', 'error');
+			return;
+		}else if(quantity == 0 || typeof(quantity) === "undefined" || quantity == null ){
+			swalAlert('กรุณากรอกจำนวน', 'error');
+			return;
+		}
 		
 		arraymedical.forEach(function(item,key) {
 			if(item.name === name){
@@ -464,14 +485,21 @@ $(document).ready(function() {
 		var desc = $('#items option:selected').attr('desc-data');
 		var max = $('#items option:selected').attr('maximum-data');
 		var couting = $('#items option:selected').attr('count-data');
-		var quantity = parseInt($('#quantity').val());
-		var unitprice = parseFloat($('#price_val').val());
+		var quantity = validateInput(parseInt($('#quantity').val()));
+		var unitprice = validateInput(parseFloat($('#price_val').val()));
 		var price = unitprice * quantity;
 		var lenght = arraymedical.length;
+		var status = $('#status').val();
 		var found = false;
 		
 		if(quantity > max){
 			swalAlert('จำนวนเวชภัณฑ์ไม่พอจ่าย','error');
+			return;
+		}else if(price == 0 || typeof(price) === "undefined" || price == null ){
+			swalAlert('กรุณากรอกราคา', 'error');
+			return;
+		}else if(quantity == 0 || typeof(quantity) === "undefined" || quantity == null ){
+			swalAlert('กรุณากรอกจำนวน', 'error');
 			return;
 		}
 		
@@ -492,7 +520,7 @@ $(document).ready(function() {
 		});
 		if(!found)
 		{
-			arraymedical.push({id,name,desc,quantity,price});//id = medicalid, name = medicalname, 
+			arraymedical.push({id,name,desc,quantity,price,status});//id = medicalid, name = medicalname, 
 			$('#bodyforaddmedical_export > tbody:last-child').append('<tr>'+
 			'<td>'+
 				'<div id="name">'+name+'</div>'+
@@ -526,13 +554,19 @@ $(document).ready(function() {
 		var desc = $('#items option:selected').attr('desc-data');
 		var max = $('#items option:selected').attr('maximum-data');
 		var couting = $('#items option:selected').attr('count-data');
-		var quantity = parseInt($('#quantity').val());
-		var price = parseFloat($('#price_val').val());
+		var quantity = validateInput(parseInt($('#quantity').val()));
+		var price = validateInput(parseFloat($('#price_val').val()));
 		var lenght = arraymedical.length;
 		var found = false;
 		
 		if(quantity > max){
 			swalAlert('จำนวนยาไม่พอจ่าย', 'error');
+			return;
+		}else if(price == 0 || typeof(price) === "undefined" || price == null ){
+			swalAlert('กรุณากรอกราคา', 'error');
+			return;
+		}else if(quantity == 0 || typeof(quantity) === "undefined" || quantity == null ){
+			swalAlert('กรุณากรอกจำนวน', 'error');
 			return;
 		}
 		
@@ -578,8 +612,8 @@ $(document).ready(function() {
 		var desc = $('#items option:selected').attr('desc-data');
 		var max = $('#items option:selected').attr('maximum-data');
 		var couting = $('#items option:selected').attr('count-data');
-		var quantity = parseInt($('#quantity').val());
-		var price = parseFloat($('#price_val').val());
+		var quantity = validateInput(parseInt($('#quantity').val()));
+		var price = validateInput(parseFloat($('#price_val').val()));
 		var status = $('#status').val();
 		var lenght = arraymedical.length;
 		var found = false;
@@ -587,6 +621,15 @@ $(document).ready(function() {
 		
 		if(quantity > max){
 			swalAlert('จำนวนยาไม่พอจ่าย', 'error');
+			return;
+		}else if(status === "" || typeof(status) === "undefined" || status == null ){
+			swalAlert('กรุณาเลือกค่าสถานะก่อน', 'error');
+			return;
+		}else if(price == 0 || typeof(price) === "undefined" || price == null ){
+			swalAlert('กรุณากรอกราคา', 'error');
+			return;
+		}else if(quantity == 0 || typeof(quantity) === "undefined" || quantity == null ){
+			swalAlert('กรุณากรอกจำนวน', 'error');
 			return;
 		}
 		
@@ -792,7 +835,7 @@ $(document).ready(function() {
 		if(idh){
 			$.ajax({
 				type: "POST",
-				url: "ajax/viewLogHerbal.php",
+				url: "ajax/viewlogherbal.php",
 				data: { id: idh }
 			}).done(function( msg ) {
 				const data = JSON.parse(msg);
@@ -838,7 +881,7 @@ $(document).ready(function() {
 		if(idh){
 			$.ajax({
 				type: "POST",
-				url: "ajax/viewLogMedical.php",
+				url: "ajax/viewlogmedical.php",
 				data: { id: idh }
 			}).done(function( msg ) {
 				const data = JSON.parse(msg);
@@ -999,7 +1042,7 @@ $(document).ready(function() {
 			$('#logHerbalWarehouse').modal('hide');
 			$.ajax({
 				type: "GET",
-				url: "ajax/editLogHerbal",
+				url: "ajax/editlogherbal",
 				data: { id: idh }
 			}).done(function( msg ) {
 				const data = JSON.parse(msg);
@@ -1043,7 +1086,7 @@ $(document).ready(function() {
 			$('#logMedicalWarehouse').modal('hide');
 			$.ajax({
 				type: "GET",
-				url: "ajax/editLogMedical",
+				url: "ajax/editlogmedical",
 				data: { id: idh }
 			}).done(function( msg ) {
 				const data = JSON.parse(msg);
@@ -1083,7 +1126,7 @@ $(document).ready(function() {
 		if(iStatus && id){
 			$.ajax({
 				type: "POST",
-				url: "ajax/editLogMedical",
+				url: "ajax/editlogmedical",
 				data: { id: id, price_mdc: price, quan_mdc: quan}
 			}).done(function( msg ) {
 				const data = JSON.parse(msg);
@@ -1108,7 +1151,7 @@ $(document).ready(function() {
 		if(iStatus && id){
 			$.ajax({
 				type: "POST",
-				url: "ajax/editLogHerbal",
+				url: "ajax/editlogherbal",
 				data: { id: id, priceHerbal: priceHerbal, quantityHerbal: quantityHerbal, expireDate: expireDate}
 			}).done(function( msg ) {
 				const data = JSON.parse(msg);

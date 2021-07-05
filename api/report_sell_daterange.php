@@ -44,7 +44,7 @@ table{
 </style>
 
 <h3 style="text-align:center;">
-รายงานยอดขายระหว่างวันที่ <?php echo $start . " ถึง " . $end;?>
+รายงานยอดขายระหว่างวันที่ <?php echo $functions->thai_date(strtotime($start)) . " ถึง " . $functions->thai_date(strtotime($end)) ;?>
 </h3>
 <table>
 <thead>
@@ -53,8 +53,8 @@ table{
 	<th style="width:20%;text-align: center;"><b>ผู้จ่าย</b></th>
 	<th style="width:15%;text-align: center;">ชื่อยาสมุนไพร</th>
 	<th style="width:20%;text-align: center;">สถานะ</th>
-	<th style="width:10%;text-align: center;">จำนวน</th>
-	<th style="width:10%;text-align: center;">ราคา/ชิ้น</th>
+	<th style="width:10%;text-align: right;">จำนวน</th>
+	<th style="width:10%;text-align: right;">ราคา/ชิ้น</th>
 	<th style="width:25%;text-align: center;">หมายเหตุ</th>
   </tr>
 </thead>
@@ -81,11 +81,11 @@ table{
 		<td style="width:20%;text-align: center;">
 			<?php echo $row['Status']; ?>
 		</td>
-		<td style="width:10%;text-align: center;">
+		<td style="width:10%;text-align: right;">
 			<?php echo $row['Quantity']; ?>
 		</td>
-		<td style="width:10%;text-align: center;">
-			<?php echo $row['Price'] . " ฿"; ?>
+		<td style="width:10%;text-align: right;">
+			<?php echo $row['Price'] . " "; ?>
 		</td>
 		<td style="width:25%;text-align: center;">
 			<?php 
@@ -100,10 +100,10 @@ table{
 	<tr>
 		<td style="text-align: center;" colspan="4">
 		</td>
-		<td style="text-align: center;">
+		<td style="text-align: right;">
 			<b><?php echo $sumQuantity;?></b> ชิ้น
 		</td>
-		<td style="text-align: center;">
+		<td style="text-align: right;">
 			<b><?php echo $sumPrice;?></b> บาท
 		</td>
 	</tr>
