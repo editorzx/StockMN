@@ -144,7 +144,7 @@ header('Content-Type: text/html; charset=utf-8');
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
-					กราฟยอดขายประจำเดือน 
+					กราฟยอดขายดีประจำเดือน 
 					<?php 
 						echo "<b>".$functions->kdxrFormatDate(strtotime(date("Y/m/d H:i:s")), "m")."</b>"
 					?>

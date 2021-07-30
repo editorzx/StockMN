@@ -1557,9 +1557,10 @@ class kdxr_function {
 		$sql = "SELECT 
 				e.name as herbalName,
 				CASE
-									WHEN ISNULL(SUM(GREATEST(a.quantity, 0))) THEN CONCAT_WS(\" \", 0, f.`Name`) 
-									ELSE CONCAT_WS(\" \",  SUM(GREATEST(a.quantity, 0)), f.`Name`) 
-				END as `quantity`
+									WHEN ISNULL(SUM(GREATEST(a.quantity, 0))) THEN CONCAT_WS(\" \", 0) 
+									ELSE CONCAT_WS(\" \",  SUM(GREATEST(a.quantity, 0))) 
+				END as `quantity`,
+				f.`Name` as Counting
 				FROM outstock_herbal a
 				JOIN exported_herbal_intoout_info b on b.id = a.id_exported_info
 				JOIN instock_herbal c on c.id = b.id_instock
@@ -1569,6 +1570,12 @@ class kdxr_function {
 				GROUP BY e.Id
 				ORDER BY e.Name
 				";
+				/*
+				CASE
+									WHEN ISNULL(SUM(GREATEST(a.quantity, 0))) THEN CONCAT_WS(\" \", 0, f.`Name`) 
+									ELSE CONCAT_WS(\" \",  SUM(GREATEST(a.quantity, 0)), f.`Name`) 
+				END as `quantity`
+				*/
 		$result = mysqli_query($conn, $sql);
 		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
 		{
@@ -1585,7 +1592,9 @@ class kdxr_function {
 				j.`name` as PartnerName,
 				k.`Name` as TypeName,
 				m.`name` as `Status`,
-				CONCAT_WS(\" \", a.pending_quantity, i.`Name`)  as Quantity,
+				--CONCAT_WS(\" \", a.pending_quantity, i.`Name`)  as Quantity,
+				a.pending_quantity as Quantity,
+				i.`Name` as Counting,
 				a.price as Price,
 				b.pending_date as outDate,
 				l.name as lotName,
@@ -1632,7 +1641,9 @@ class kdxr_function {
 				j.`name` as PartnerName,
 				k.`Name` as TypeName,
 				m.`name` as `Status`,
-				CONCAT_WS(\" \", a.pending_quantity, i.`Name`)  as Quantity,
+				--CONCAT_WS(\" \", a.pending_quantity, i.`Name`)  as Quantity,
+				a.pending_quantity as Quantity,
+				i.`Name` as Counting,
 				a.price as Price,
 				b.pending_date as outDate,
 				l.name as lotName,

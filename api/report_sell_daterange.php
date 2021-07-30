@@ -43,19 +43,21 @@ table{
 
 </style>
 
-<h3 style="text-align:center;">
-รายงานยอดขายระหว่างวันที่ <?php echo $functions->thai_date(strtotime($start)) . " ถึง " . $functions->thai_date(strtotime($end)) ;?>
-</h3>
+<h4 style="text-align:center;">
+รายงานยอดขายระหว่างวันที่  <br><?php echo $functions->thai_date(strtotime($start)) . " ถึง " . $functions->thai_date(strtotime($end)) ;?>
+</h4>
 <table>
 <thead>
   <tr>
-	<th style="width:3%;text-align: center;"></th>
-	<th style="width:20%;text-align: center;"><b>ผู้จ่าย</b></th>
-	<th style="width:15%;text-align: center;">ชื่อยาสมุนไพร</th>
-	<th style="width:20%;text-align: center;">สถานะ</th>
+	<th style="width:6%;text-align: center;">ลำดับ</th>
+	<th style="width:20%;text-align: left;"><b>ผู้จ่าย</b></th>
+	<th style="width:10%;text-align: left;">ชื่อยา</th>
+	<th style="width:15%;text-align: left;">สถานะ</th>
 	<th style="width:10%;text-align: right;">จำนวน</th>
-	<th style="width:10%;text-align: right;">ราคา/ชิ้น</th>
-	<th style="width:25%;text-align: center;">หมายเหตุ</th>
+	<th style="width:10%;text-align: left;">หน่วยนับ</th>
+	<th style="width:10%;text-align: right;font-size:13px !important;">ราคา/หน่วย</th>
+	<th style="width:10%;text-align: right">ราคารวม</th>
+	<th style="width:15%;text-align: center;">หมายเหตุ</th>
   </tr>
 </thead>
 <tbody>
@@ -69,27 +71,33 @@ table{
 			$sumPrice += $row['sumQuantity'];
 	?>
 	<tr nobr="true">
-		<td style="width:3%;text-align: center;">
+		<td style="width:6%;text-align: center;">
 			<?php echo ++$key;?>
 		</td>
-		<td style="width:20%;text-align: center;">
+		<td style="width:20%;text-align: left;">
 			<?php echo $row['FullName']; ?>
 		</td>
-		<td style="width:15%;text-align: center;">
+		<td style="width:10%;text-align: left;">
 			<?php echo $row['HerbalName']; ?>
 		</td>
-		<td style="width:20%;text-align: center;">
+		<td style="width:15%;text-align: left;">
 			<?php echo $row['Status']; ?>
 		</td>
 		<td style="width:10%;text-align: right;">
 			<?php echo $row['Quantity']; ?>
 		</td>
-		<td style="width:10%;text-align: right;">
-			<?php echo $row['Price'] . " "; ?>
+		<td style="width:10%;text-align: left;">
+			<?php echo $row['Counting']; ?>
 		</td>
-		<td style="width:25%;text-align: center;">
+		<td style="width:10%;text-align: right;">
+			<?php echo $row['Price']; ?>
+		</td>
+		<td style="width:10%;text-align: right;">
+			<?php echo $row['sumQuantity']; ?>
+		</td>
+		<td style="width:15%;text-align: center;">
 			<?php 
-				echo "รวมเป็นเงิน " . ($row['sumQuantity']) . " ฿ <br> จากคลัง  <b>" . $row['lotName']." </b>"; //$functions->thai_date_and_time(strtotime($row['outDate']))
+				echo " จากคลัง  <b>" . $row['lotName']." </b>"; //$functions->thai_date_and_time(strtotime($row['outDate']))
 			?>
 		</td>
 	</tr>
@@ -100,11 +108,12 @@ table{
 	<tr>
 		<td style="text-align: center;" colspan="4">
 		</td>
-		<td style="text-align: right;">
-			<b><?php echo $sumQuantity;?></b> ชิ้น
+		<td style="text-align: right;" colspan="1">
+			<b><?php echo $sumQuantity;?></b> 
 		</td>
-		<td style="text-align: right;">
-			<b><?php echo $sumPrice;?></b> บาท
+		<td></td>
+		<td style="text-align: right;" colspan="2">
+			<b><?php echo number_format((float)$sumPrice, 2, '.', '');;?></b>
 		</td>
 	</tr>
 </tbody>

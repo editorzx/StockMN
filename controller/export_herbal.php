@@ -29,10 +29,9 @@
 				</div>
 				<div class="row">
 					<div class="form-group col-sm-12 row">
-						<label class="col-md-3 col-form-label">จำนวน</label>
+						<label class="col-md-3 col-form-label">จำนวน (<span class="text-muted" id="quantity-name">หน่วย</span>)</label>
 						<div class="col-md-9">
 							<input class="form-control" id="quantity" name="quantity" min="1" value="1" type="number" placeholder="จำนวน" required>
-							<span class="help-block text-muted font-xs">ชิ้น</span>
 						</div>
 					</div>
 				</div>

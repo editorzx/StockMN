@@ -44,10 +44,10 @@ table{
 <table>
 <thead>
   <tr>
-	<th style="width:10%;text-align: center;"></th>
-	<th style="width:30%;text-align: center;">ชื่อยาสมุนไพร</th>
-	<th style="width:30%;text-align: center;">หน่วยนับ</th>
-	<th style="width:30%;text-align: center;">ประเภท</th>
+	<th style="width:10%;text-align: center;">ลำดับ</th>
+	<th style="width:30%;text-align: left;">ชื่อยาสมุนไพร</th>
+	<th style="width:30%;text-align: left;">หน่วยนับ</th>
+	<th style="width:30%;text-align: left;">ประเภท</th>
   </tr>
 </thead>
 <tbody>
@@ -60,13 +60,13 @@ table{
 		<td style="width:10%;text-align: center;">
 			<?php echo ++$key;?>
 		</td>
-		<td style="width:30%;text-align: center;">
+		<td style="width:30%;text-align: left;">
 			<?php echo $row['herbalName']; ?>
 		</td>
-		<td style="width:30%;text-align: center;">
+		<td style="width:30%;text-align: left;">
 			<?php echo $row['countingName']; ?>
 		</td>
-		<td style="width:30%;text-align: center;">
+		<td style="width:30%;text-align: left;">
 			<?php echo $row['typeName']; ?>
 		</td>
 	</tr>

@@ -29,14 +29,15 @@ table{
 }
 
 </style>
-	<h2 style="text-align:center;">รายงานยาสมุนไพรคงเหลือคลังนอก <?php echo $functions->thai_date(strtotime(date('Y-m-d')));?></h2>
+	<h3 style="text-align:center;">รายงานยาสมุนไพรคงเหลือคลังนอก <br><?php echo $functions->thai_date(strtotime(date('Y-m-d')));?></h3>
 	<h3 style="text-align:center;">ยาสมุนไพร</h3>
 	<table>
 	<thead>
 	  <tr>
-		<th style="width:5%;text-align: center;"></th>
-		<th style="width:55%;text-align: center;"><b>ชื่อยาสมุนไพร</b></th>
-		<th style="width:40%;text-align: center;">จำนวนคงเหลือ</th>
+		<th style="width:10%;text-align: center;">ลำดับ</th>
+		<th style="width:50%;text-align: left;"><b>ชื่อยาสมุนไพร</b></th>
+		<th style="width:20%;text-align: right;">จำนวนคงเหลือ</th>
+		<th style="width:20%;text-align: left;"><b>หน่วยนับ</b></th>
 	  </tr>
 	</thead>
 	<tbody>
@@ -46,16 +47,19 @@ table{
 			{
 		?>
 		<tr nobr="true">
-			<td style="width:5%;text-align: center;">
+			<td style="width:10%;text-align: center;">
 				<?php echo ++$key;?>
 			</td>
-			<td style="width:55%;text-align: center;">
+			<td style="width:50%;text-align: left;">
 				<?php echo $row['herbalName'] ?>
 			</td>
-			<td style="width:40%;text-align: center;">
+			<td style="width:20%;text-align: right;">
 				<?php 
 					echo $row['quantity']; 
 				?>
+			</td>
+			<td style="width:20%;text-align: left;">
+				<?php echo $row['Counting'] ?>
 			</td>
 		</tr>
 		<?php

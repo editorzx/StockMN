@@ -562,10 +562,10 @@ $(document).ready(function() {
 		if(quantity > max){
 			swalAlert('จำนวนยาไม่พอจ่าย', 'error');
 			return;
-		}else if(price == 0 || typeof(price) === "undefined" || price == null ){
+		}/*else if(price == 0 || typeof(price) === "undefined" || price == null ){
 			swalAlert('กรุณากรอกราคา', 'error');
 			return;
-		}else if(quantity == 0 || typeof(quantity) === "undefined" || quantity == null ){
+		}*/else if(quantity == 0 || typeof(quantity) === "undefined" || quantity == null ){
 			swalAlert('กรุณากรอกจำนวน', 'error');
 			return;
 		}

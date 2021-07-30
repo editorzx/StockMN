@@ -36,7 +36,7 @@ table{
 
 </style>
 <h2 style="text-align:center;">
-รายงานรายละเอียดการเบิกยาสมุนไพรและเวชภัณฑ์จากคลังใน <?php echo $functions->thai_date(strtotime($start)) . " ถึง " . $functions->thai_date(strtotime($end));?>
+รายงานรายละเอียดการเบิกยาสมุนไพรและเวชภัณฑ์จากคลังใน <br> <?php echo $functions->thai_date(strtotime($start)) . " ถึง " . $functions->thai_date(strtotime($end));?>
 </h3>
 <?php
 	if($type === 'herbal')
@@ -46,12 +46,12 @@ table{
 	<table>
 	<thead>
 	  <tr>
-		<th style="width:5%;text-align: center;"></th>
-		<th style="width:25%;text-align: center;"><b>ผู้เบิก</b></th>
-		<th style="width:25%;text-align: center;"><b>ชื่อยาสมุนไพร</b></th>
+		<th style="width:5%;text-align: center;">ลำดับ</th>
+		<th style="width:25%;text-align: left;"><b>ผู้เบิก</b></th>
+		<th style="width:25%;text-align: left;"><b>ชื่อยาสมุนไพร</b></th>
 		<th style="width:20%;text-align: center;">วันที่เบิก</th>
 		<th style="text-align: right;width:10%;">จำนวน</th>
-		<th style="text-align: center;width:15%;">หน่วยนับ</th>
+		<th style="text-align: left;width:15%;">หน่วยนับ</th>
 	  </tr>
 	</thead>
 	<tbody>
@@ -64,10 +64,10 @@ table{
 			<td style="width:5%;text-align: center;">
 				<?php echo ++$key;?>
 			</td>
-			<td style="width:25%;text-align: center;">
+			<td style="width:25%;text-align: left;">
 				<?php echo $row['FullName'] ?>
 			</td>
-			<td style="width:25%;text-align: center;">
+			<td style="width:25%;text-align: left;">
 				<?php echo $row['HerbalName'] ?>
 			</td>
 			<td style="width:20%;text-align: center;">
@@ -78,7 +78,7 @@ table{
 			<td style="text-align: right;width:10%;">
 				<?php echo $row['Quantity'];  ?>
 			</td>
-			<td style="text-align: center;width:15%;">
+			<td style="text-align: left;width:15%;">
 				<?php echo $row['CountingName'];  ?>
 			</td>
 		</tr>
@@ -94,13 +94,13 @@ table{
 	<table>
 	<thead>
 	  <tr>
-		<th style="width:5%;text-align: center;"></th>
-		<th style="width:25%;text-align: center;"><b>ผู้เบิก</b></th>
-		<th style="width:15%;text-align: center;"><b>ชื่อเวชภัณฑ์</b></th>
+		<th style="width:5%;text-align: center;">ลำดับ</th>
+		<th style="width:25%;text-align: left;"><b>ผู้เบิก</b></th>
+		<th style="width:15%;text-align: left;"><b>ชื่อเวชภัณฑ์</b></th>
 		<th style="width:20%;text-align: center;">วันที่เบิก</th>
 		<th style="text-align: center;width:20%;">สถานะ</th>
 		<th style="text-align: right;width:10%;">จำนวน</th>
-		<th style="text-align: center;width:10%;">หน่วยนับ</th>
+		<th style="text-align: left;width:10%;">หน่วยนับ</th>
 	  </tr>
 	</thead>
 	<tbody>
@@ -113,10 +113,10 @@ table{
 			<td style="width:5%;text-align: center;">
 				<?php echo ++$key;?>
 			</td>
-			<td style="width:25%;text-align: center;">
+			<td style="width:25%;text-align: left;">
 				<?php echo $row['FullName'] ?>
 			</td>
-			<td style="width:15%;text-align: center;">
+			<td style="width:15%;text-align: left;">
 				<?php echo $row['MedicalName'] ?>
 			</td>
 			<td style="width:20%;text-align: center;">
@@ -124,13 +124,13 @@ table{
 					echo $functions->thai_date(strtotime($row['Date'])); 
 				?>
 			</td>
-			<td style="text-align: center;width:20%;font-size: 15px;">
+			<td style="text-align: left;width:20%;font-size: 15px;">
 				<?php echo $row['status'];  ?>
 			</td>
 			<td style="text-align: right;width:10%;">
 				<?php echo $row['Quantity'];  ?>
 			</td>
-			<td style="text-align: center;width:10%;">
+			<td style="text-align: left;width:10%;">
 				<?php echo $row['CountingName'];  ?>
 			</td>
 		</tr>
